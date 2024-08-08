@@ -31,7 +31,13 @@ private:
 	AActor* SpawnedIndicatorActor;
 
 	UPROPERTY()
-	TArray<AActor*> ValidGrappleTargets;
+	TArray<AActor*> SpawnedIndicatorActors;
+
+	// Stores the previous grapple targets
+	TArray<AActor*> PreviousGrappleTargets;
+
+	//UPROPERTY()
+	//TArray<AActor*> ValidGrappleTargets;
 
 	UPROPERTY()
 	AActor* LineTraceHitActor;

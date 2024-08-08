@@ -61,7 +61,6 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
 {
     if (PlayerCharacter && PlayerController)
     {
-        /* Spawn a sphere trace to find all valid grapple targets */
         FVector CameraLocation;
         FRotator CameraRotation;
         PlayerController->GetPlayerViewPoint(CameraLocation, CameraRotation);
@@ -74,7 +73,7 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
 
         DrawDebugSphere(GetWorld(), CameraLocation, SphereRadius, 12, FColor::Orange, false, 2.0f);
 
-        /* Find valid grapple targets */
+        // Find valid grapple targets
         TArray<AActor*> AllGrappleTargets;
         for (const FHitResult& Hit : HitResults)
         {
@@ -85,7 +84,7 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
             }
         }
 
-        /* Find the best grapple targets */
+        // Find the best grapple targets
         TArray<AActor*> ValidGrappleTargets;
 
         FVector PlayerForwardVector = PlayerCharacter->GetActorForwardVector();
@@ -101,7 +100,7 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
             }
         }
 
-        /* Sort grapple targets by distance to the camera, this allows for a max of two grapple targets (similiar to ODM)*/
+        // Sort targets by distance to the camera
         ValidGrappleTargets.Sort([&](const AActor& A, const AActor& B)
             {
                 float DistanceA = FVector::Dist(CameraLocation, A.GetActorLocation());
@@ -109,13 +108,13 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
                 return DistanceA < DistanceB;
             });
 
-        // Find the best two grapple points (This is based on distance and angle from player)
+        // Limit to the top 2 targets
         if (ValidGrappleTargets.Num() > 2)
         {
-            ValidGrappleTargets.SetNum(2);
+            ValidGrappleTargets.SetNum(2); // Keep only the top 2 targets
         }
 
-        // Destroy old indicator actors (Temporary until UI is implemented)
+        // Destroy old indicator actors
         for (AActor* Indicator : SpawnedIndicatorActors)
         {
             if (Indicator)
@@ -123,11 +122,9 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
                 Indicator->Destroy();
             }
         }
+        SpawnedIndicatorActors.Empty(); // Clear the array
 
-        // Empty the array
-        SpawnedIndicatorActors.Empty(); 
-
-        // Spawn new indicator actors for the two best grapple targets
+        // Spawn new indicator actors for the best grapple targets
         for (AActor* Target : ValidGrappleTargets)
         {
             if (Target)
@@ -138,15 +135,14 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
                 FActorSpawnParameters SpawnParams;
                 SpawnParams.Owner = PlayerCharacter;
 
-                // spawn actor
+                // Replace AYourIndicatorActorClass with the actual class of the actor you want to spawn
                 AActor* NewIndicator = GetWorld()->SpawnActor<AActor>(IndicatorClass, SpawnLocation, SpawnRotation, SpawnParams);
                 if (NewIndicator)
                 {
                     NewIndicator->SetActorScale3D(FVector(5.0f));
-                    SpawnedIndicatorActors.Add(NewIndicator); 
+                    SpawnedIndicatorActors.Add(NewIndicator); // Keep track of spawned indicators
                 }
 
-                // bp tests
                 BP_BestGrappleTarget(Target);
             }
         }
