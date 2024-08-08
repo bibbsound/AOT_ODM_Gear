@@ -52,16 +52,23 @@ void UGrappleAbility_FindValidTarget::PerformLineTrace()
 
 void UGrappleAbility_FindValidTarget::PerformSphereTrace()
 {
-    FVector StartLocation = PlayerCharacter->GetActorLocation();
+    if (PlayerCharacter && PlayerController)
+    {
+        FVector CameraLocation;
+        FRotator CameraRotation;
+        PlayerController->GetPlayerViewPoint(CameraLocation, CameraRotation);
 
-    TArray<FHitResult> HitResults;
+        FVector TraceEnd = CameraLocation + (CameraRotation.Vector() * MaxGrappleDistance);
 
-    float SphereRadius = MaxGrappleDistance / 2.0f;
+        TArray<FHitResult> HitResults;
+        float SphereRadius = MaxGrappleDistance;
 
-    bool bSphereHit = GetWorld()->SweepMultiByChannel(HitResults, StartLocation, StartLocation, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(SphereRadius));
-    DrawDebugSphere(GetWorld(), StartLocation, SphereRadius, 12, FColor::Orange, false, 2.0f);
+        // Ensures that the sphere trace covers the same range as the line trace 
+        bool bSphereHit = GetWorld()->SweepMultiByChannel(HitResults, CameraLocation, TraceEnd, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(SphereRadius));
 
+        DrawDebugSphere(GetWorld(), CameraLocation, SphereRadius, 12, FColor::Orange, false, 2.0f);
 
+    }
 }
 
 void UGrappleAbility_FindValidTarget::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
