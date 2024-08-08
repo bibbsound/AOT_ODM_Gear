@@ -68,19 +68,6 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
 
         DrawDebugSphere(GetWorld(), CameraLocation, SphereRadius, 12, FColor::Orange, false, 2.0f);
 
-        // Find a valid grapple target
-        TArray<AActor*> ValidGrappleTargets;
-
-        for (const FHitResult& Hit : HitResults) // loop over sphere trace hits
-        {
-            AActor* HitActor = Hit.GetActor();
-            if (HitActor && HitActor->ActorHasTag(FName("GrappleTarget"))) //Check tag to ensure actor is valid grapple target
-            {
-                ValidGrappleTargets.Add(HitActor);
-            }
-        }
-
-        // @TODO determine best grapple target from array
     }
 }
 
