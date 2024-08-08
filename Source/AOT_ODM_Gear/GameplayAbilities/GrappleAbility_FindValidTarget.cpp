@@ -80,7 +80,29 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
             }
         }
 
-        // @TODO determine best grapple target from array
+        // Find the best grapple target
+        AActor* BestGrappleTarget = nullptr;
+
+        // The best grapple target is determined by distance and the angle from the player to it
+        float BestDotProduct = -1.0f; // Determine angle 
+        FVector PlayerForwardVector = PlayerCharacter->GetActorForwardVector();
+
+        for (AActor* Target : ValidGrappleTargets)
+        {
+            FVector DirectionToTarget = (Target->GetActorLocation() - CameraLocation).GetSafeNormal();
+            float DotProduct = FVector::DotProduct(PlayerForwardVector, DirectionToTarget);
+
+            // for now use 0.5
+            if (DotProduct > BestDotProduct && DotProduct > 0.5f) 
+            {
+                BestDotProduct = DotProduct;
+                BestGrappleTarget = Target;
+            }
+        }
+
+        //@TODO spawn UI indicator at best grapple target location
+
+
     }
 }
 

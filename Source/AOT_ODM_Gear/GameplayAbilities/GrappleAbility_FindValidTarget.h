@@ -23,6 +23,8 @@ private:
 
 	class APlayerController* PlayerController;
 
+	AActor* PreviousGrappleTarget = nullptr;
+
 	// Used to find grapple objects directly infront of the player
 	UFUNCTION()
 	void PerformLineTrace();
@@ -39,4 +41,7 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_InValidGrappleTarget();
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_BestGrappleTarget(AActor* Target);
 };

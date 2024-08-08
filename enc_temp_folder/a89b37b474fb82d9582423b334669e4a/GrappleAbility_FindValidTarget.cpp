@@ -68,6 +68,44 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
 
         DrawDebugSphere(GetWorld(), CameraLocation, SphereRadius, 12, FColor::Orange, false, 2.0f);
 
+        // Find a valid grapple target
+        TArray<AActor*> ValidGrappleTargets;
+
+        for (const FHitResult& Hit : HitResults) // loop over sphere trace hits
+        {
+            AActor* HitActor = Hit.GetActor();
+            if (HitActor && HitActor->ActorHasTag(FName("GrappleTarget"))) //Check tag to ensure actor is valid grapple target
+            {
+                ValidGrappleTargets.Add(HitActor);
+            }
+        }
+
+        AActor* BestGrappleTarget = nullptr;
+        float BestDotProduct = -1.0f;
+        FVector PlayerForwardVector = PlayerCharacter->GetActorForwardVector();
+
+        for (AActor* Target : ValidGrappleTargets)
+        {
+            FVector DirectionToTarget = (Target->GetActorLocation() - CameraLocation).GetSafeNormal();
+            float DotProduct = FVector::DotProduct(PlayerForwardVector, DirectionToTarget);
+
+            // Check if the dot product is better and within a valid angle
+            if (DotProduct > BestDotProduct && DotProduct > 0.5f) // Example threshold
+            {
+                BestDotProduct = DotProduct;
+                BestGrappleTarget = Target;
+            }
+        }
+
+        // Check if the new target is different from the previous one
+        if (BestGrappleTarget != PreviousGrappleTarget)
+        {
+            // A new grapple target has been selected, trigger any relevant actions
+            BP_BestGrappleTarget(BestGrappleTarget);
+
+            // Update the previous target to the current one
+            PreviousGrappleTarget = BestGrappleTarget;
+        }
     }
 }
 
