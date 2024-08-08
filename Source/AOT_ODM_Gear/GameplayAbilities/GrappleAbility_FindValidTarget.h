@@ -25,6 +25,11 @@ private:
 
 	AActor* PreviousGrappleTarget = nullptr;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Grapple Ability")
+	TSubclassOf<AActor> IndicatorClass;
+
+	AActor* SpawnedIndicatorActor;
+
 	// Used to find grapple objects directly infront of the player
 	UFUNCTION()
 	void PerformLineTrace();

@@ -80,6 +80,26 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
             }
         }
 
+        //// Find the best grapple target
+        //AActor* BestGrappleTarget = nullptr;
+
+        //// The best grapple target is determined by distance and the angle from the player to it
+        //float BestDotProduct = -1.0f; // Determine angle 
+        //FVector PlayerForwardVector = PlayerCharacter->GetActorForwardVector();
+
+        //for (AActor* Target : ValidGrappleTargets)
+        //{
+        //    FVector DirectionToTarget = (Target->GetActorLocation() - CameraLocation).GetSafeNormal();
+        //    float DotProduct = FVector::DotProduct(PlayerForwardVector, DirectionToTarget);
+
+        //    // for now use 0.5
+        //    if (DotProduct > BestDotProduct && DotProduct > 0.5f) 
+        //    {
+        //        BestDotProduct = DotProduct;
+        //        BestGrappleTarget = Target;
+        //    }
+        //}
+
         AActor* BestGrappleTarget = nullptr;
         float BestDotProduct = -1.0f;
         FVector PlayerForwardVector = PlayerCharacter->GetActorForwardVector();
@@ -100,12 +120,38 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
         // Check if the new target is different from the previous one
         if (BestGrappleTarget != PreviousGrappleTarget)
         {
-            // A new grapple target has been selected, trigger any relevant actions
-            BP_BestGrappleTarget(BestGrappleTarget);
+            // If there was a previously spawned actor, destroy it
+            if (SpawnedIndicatorActor)
+            {
+                SpawnedIndicatorActor->Destroy();
+                SpawnedIndicatorActor = nullptr;
+            }
+
+            // Spawn a new actor at the new best grapple target's location
+            if (BestGrappleTarget)
+            {
+                FVector SpawnLocation = BestGrappleTarget->GetActorLocation();
+                FRotator SpawnRotation = FRotator::ZeroRotator;
+                
+                FActorSpawnParameters SpawnParams;
+                SpawnParams.Owner = PlayerCharacter;
+
+                // Replace AYourIndicatorActorClass with the actual class of the actor you want to spawn
+                SpawnedIndicatorActor = GetWorld()->SpawnActor<AActor>(IndicatorClass, SpawnLocation, SpawnRotation, SpawnParams);
+                if(SpawnedIndicatorActor)
+                {
+                    SpawnedIndicatorActor->SetActorScale3D(FVector(5.0f));
+                }
+
+                // Trigger any relevant actions (e.g., updating UI)
+                BP_BestGrappleTarget(BestGrappleTarget);
+            }
 
             // Update the previous target to the current one
             PreviousGrappleTarget = BestGrappleTarget;
         }
+
+
     }
 }
 
