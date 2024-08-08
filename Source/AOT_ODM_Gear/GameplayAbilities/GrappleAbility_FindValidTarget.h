@@ -19,8 +19,16 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Grapple Ability")
 	float MaxGrappleDistance;
 
+	class AAOT_ODM_GearCharacter* PlayerCharacter;
+
+	class APlayerController* PlayerController;
+
+	// Used to find grapple objects directly infront of the player
 	UFUNCTION()
 	void PerformLineTrace();
+
+	UFUNCTION()
+	void PerformSphereTrace();
 
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 

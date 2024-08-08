@@ -13,15 +13,15 @@ UGrappleAbility_FindValidTarget::UGrappleAbility_FindValidTarget()
 
 void UGrappleAbility_FindValidTarget::PerformLineTrace()
 {
-    if (AAOT_ODM_GearCharacter* PlayerCharacter = Cast<AAOT_ODM_GearCharacter>(GetAvatarActorFromActorInfo()))
+    if (PlayerCharacter)
     {
-        if (APlayerController* PlayerController = Cast<APlayerController>(PlayerCharacter->GetController()))
+        if (PlayerController)
         {
             FVector CameraLocation;
             FRotator CameraRotation;
             PlayerController->GetPlayerViewPoint(CameraLocation, CameraRotation);
 
-            FVector TraceEnd = CameraLocation + (CameraRotation.Vector() * 10000);
+            FVector TraceEnd = CameraLocation + (CameraRotation.Vector() * MaxGrappleDistance);
 
             FHitResult HitResult;
             FCollisionQueryParams QueryParams;
@@ -31,7 +31,7 @@ void UGrappleAbility_FindValidTarget::PerformLineTrace()
 
             if (bHit && HitResult.GetActor() && HitResult.GetActor()->ActorHasTag(FName("GrappleTarget")))
             {
-                //DrawDebugLine(GetWorld(), CameraLocation, HitResult.Location, FColor::Red, false, 1.0f, 0, 1.0f);
+                DrawDebugLine(GetWorld(), CameraLocation, HitResult.Location, FColor::Red, false, 1.0f, 0, 1.0f);
 
                 PlayerCharacter->SetbCanGrapple(true);
 
@@ -40,7 +40,7 @@ void UGrappleAbility_FindValidTarget::PerformLineTrace()
 
             else
             {
-                //DrawDebugLine(GetWorld(), CameraLocation, TraceEnd, FColor::Green, false, 1.0f, 0, 1.0f);
+                DrawDebugLine(GetWorld(), CameraLocation, TraceEnd, FColor::Green, false, 1.0f, 0, 1.0f);
 
                 PlayerCharacter->SetbCanGrapple(false);
 
@@ -50,15 +50,39 @@ void UGrappleAbility_FindValidTarget::PerformLineTrace()
     }
 }
 
+void UGrappleAbility_FindValidTarget::PerformSphereTrace()
+{
+    FVector StartLocation = PlayerCharacter->GetActorLocation();
+
+    TArray<FHitResult> HitResults;
+
+    float SphereRadius = MaxGrappleDistance / 2.0f;
+
+    bool bSphereHit = GetWorld()->SweepMultiByChannel(HitResults, StartLocation, StartLocation, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(SphereRadius));
+    DrawDebugSphere(GetWorld(), StartLocation, SphereRadius, 12, FColor::Orange, false, 2.0f);
+
+
+}
+
 void UGrappleAbility_FindValidTarget::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
    // UE_LOG(LogTemp, Warning, TEXT("Firing ability activated"));
 
     if (ActorInfo && ActorInfo->AvatarActor.IsValid())
     {
+        // Validate pointers to player and controller 
+        PlayerCharacter = Cast<AAOT_ODM_GearCharacter>(GetAvatarActorFromActorInfo());
+
+        if(PlayerCharacter)
+        {
+            PlayerController = Cast<APlayerController>(PlayerCharacter->GetController());
+        }
+
         //UE_LOG(LogTemp, Warning, TEXT("Firing ability valid"));
 
         PerformLineTrace();
+
+        PerformSphereTrace();
 
         EndAbility(Handle, ActorInfo, ActivationInfo, true, false);
     }
