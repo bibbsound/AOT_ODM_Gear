@@ -30,6 +30,12 @@ private:
 
 	AActor* SpawnedIndicatorActor;
 
+	UPROPERTY()
+	TArray<AActor*> ValidGrappleTargets;
+
+	UPROPERTY()
+	AActor* LineTraceHitActor;
+
 	// Used to find grapple objects directly infront of the player
 	UFUNCTION()
 	void PerformLineTrace();

@@ -35,6 +35,11 @@ void UGrappleAbility_FindValidTarget::PerformLineTrace()
 
                 PlayerCharacter->SetbCanGrapple(true);
 
+                LineTraceHitActor = HitResult.GetActor();
+
+                // Add this grapple target to array of valid targets
+                ValidGrappleTargets.Add(HitResult.GetActor());
+
                 BP_ValidGrappleTarget(); // Change UI indicator in bp to valid 
             }
 
@@ -43,6 +48,8 @@ void UGrappleAbility_FindValidTarget::PerformLineTrace()
                 DrawDebugLine(GetWorld(), CameraLocation, TraceEnd, FColor::Green, false, 1.0f, 0, 1.0f);
 
                 PlayerCharacter->SetbCanGrapple(false);
+
+                LineTraceHitActor = nullptr;
 
                 BP_InValidGrappleTarget(); // Change UI indicator in bp to invalid 
             }
@@ -69,7 +76,9 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
         DrawDebugSphere(GetWorld(), CameraLocation, SphereRadius, 12, FColor::Orange, false, 2.0f);
 
         // Find a valid grapple target
-        TArray<AActor*> ValidGrappleTargets;
+
+        // Empty the array
+        ValidGrappleTargets.Empty();
 
         for (const FHitResult& Hit : HitResults) // loop over sphere trace hits
         {
@@ -80,10 +89,12 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
             }
         }
 
-        
-        
+        // Check if the line trace hit is a valid target and add it if not already present
+        if (LineTraceHitActor && !ValidGrappleTargets.Contains(LineTraceHitActor))
+        {
+            ValidGrappleTargets.Add(LineTraceHitActor);
+        }
 
-        
         
         // Find the best grapple target
         AActor* BestGrappleTarget = nullptr;
@@ -139,8 +150,6 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
             // Update previous grapple target to the current target
             PreviousGrappleTarget = BestGrappleTarget;
         }
-
-
     }
 }
 
@@ -159,6 +168,8 @@ void UGrappleAbility_FindValidTarget::ActivateAbility(const FGameplayAbilitySpec
         }
 
         //UE_LOG(LogTemp, Warning, TEXT("Firing ability valid"));
+
+        LineTraceHitActor = nullptr;
 
         PerformLineTrace();
 
