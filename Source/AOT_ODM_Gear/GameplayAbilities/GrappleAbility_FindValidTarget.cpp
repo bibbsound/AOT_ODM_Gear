@@ -11,6 +11,10 @@
 UGrappleAbility_FindValidTarget::UGrappleAbility_FindValidTarget()
 {
     InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
+
+    MaxGrappleDistance = 5000.0f;
+
+    MaxGrappleAngle = 0.5f;
 }
 
 // not used
@@ -98,7 +102,7 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
             FVector DirectionToTarget = (Target->GetActorLocation() - CameraLocation).GetSafeNormal();
             float DotProduct = FVector::DotProduct(PlayerForwardVector, DirectionToTarget);
 
-            if (DotProduct > 0.5f) 
+            if (DotProduct > MaxGrappleAngle)
             {
                 ValidGrappleTargets.Add(Target);
             }

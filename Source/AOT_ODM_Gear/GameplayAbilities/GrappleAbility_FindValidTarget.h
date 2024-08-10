@@ -20,6 +20,11 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Grapple Ability")
 	float MaxGrappleDistance;
 
+	// How close does the players forward direction have to match the grapple target 
+	// (0 - 1, where 1 is close and 0 is perpendicular)
+	UPROPERTY(EditDefaultsOnly, Category = "Grapple Ability")
+	float MaxGrappleAngle;
+
 	class AAOT_ODM_GearCharacter* PlayerCharacter;
 
 	class APlayerController* PlayerController;
