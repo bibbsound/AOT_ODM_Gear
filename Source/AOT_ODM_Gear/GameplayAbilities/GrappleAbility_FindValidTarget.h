@@ -6,6 +6,7 @@
 #include "Abilities/GameplayAbility.h"
 #include "GrappleAbility_FindValidTarget.generated.h"
 
+class UWidgetComponent;
 
 UCLASS()
 class AOT_ODM_GEAR_API UGrappleAbility_FindValidTarget : public UGameplayAbility
@@ -37,7 +38,7 @@ private:
 	TArray<AActor*> PreviousGrappleTargets;
 
 	// Keeps track of each grapple target and its grapple indicator
-	TMap<AActor*, UUserWidget*> GrappleTargetIndicators;
+	TMap<AActor*, UWidgetComponent*> GrappleTargetIndicators;
 
 	// The widget to be spawned on screen, when there is a valid grapple point
 	UPROPERTY(EditDefaultsOnly, Category = "Grapple Ability")

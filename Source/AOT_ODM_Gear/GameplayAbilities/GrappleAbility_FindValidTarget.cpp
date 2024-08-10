@@ -4,7 +4,8 @@
 #include "AOT_ODM_Gear/GameplayAbilities/GrappleAbility_FindValidTarget.h"
 #include "DrawDebugHelpers.h"
 #include "AOT_ODM_Gear/AOT_ODM_GearCharacter.h"
-#include "Blueprint/UserWidget.h"
+//#include "Blueprint/UserWidget.h"
+#include "Components/WidgetComponent.h"
 //#include "GameFramework/Character.h"
 
 UGrappleAbility_FindValidTarget::UGrappleAbility_FindValidTarget()
@@ -118,7 +119,7 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
         }
 
         // Handle indicators, temporary until UI indicators are used
-        TMap<AActor*, UUserWidget*> NewGrappleTargetIndicators;
+        TMap<AActor*, UWidgetComponent*> NewGrappleTargetIndicators;
 
         for (AActor* Target : ValidGrappleTargets)
         {
@@ -131,34 +132,20 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
 
             else
             {
+                // @TODO Will need to use a HUD class and put UI logic there 
+                // Create a new widget component for the grapple point
+                UWidgetComponent* WidgetComp = NewObject<UWidgetComponent>(Target);
 
-                if (GrapplePointWidget)
+                if (WidgetComp && GrapplePointWidget)
                 {
-                    UUserWidget* GrapplePoint = CreateWidget<UUserWidget>(GetWorld(), GrapplePointWidget);
+                    WidgetComp->SetupAttachment(Target->GetRootComponent()); // Attach to the target actor
+                    WidgetComp->SetWidgetClass(GrapplePointWidget);
+                    WidgetComp->SetRelativeLocation(FVector::ZeroVector);
+                    WidgetComp->SetWidgetSpace(EWidgetSpace::Screen); // Use screen space for 2D UI
+                    WidgetComp->RegisterComponent();
 
-                    if(GrapplePoint)
-                    {
-                        GrapplePoint->AddToViewport();
-                        NewGrappleTargetIndicators.Add(Target, GrapplePoint);
-                    }
-                    
+                    NewGrappleTargetIndicators.Add(Target, WidgetComp);
                 }
-
-
-
-                // Spawn a new indicator actor if it doesn't already exist
-               /* FVector SpawnLocation = Target->GetActorLocation();
-                FRotator SpawnRotation = FRotator::ZeroRotator;
-
-                FActorSpawnParameters SpawnParams;
-                SpawnParams.Owner = PlayerCharacter;
-
-                AActor* NewIndicator = GetWorld()->SpawnActor<AActor>(IndicatorClass, SpawnLocation, SpawnRotation, SpawnParams);
-                if (NewIndicator)
-                {
-                    NewIndicator->SetActorScale3D(FVector(5.0f));
-                    NewGrappleTargetIndicators.Add(Target, NewIndicator);
-                }*/
             }
         }
 
@@ -168,7 +155,7 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
             if (IndicatorPair.Value)
             {
                 //IndicatorPair.Value->Destroy();
-                IndicatorPair.Value->RemoveFromParent();
+                IndicatorPair.Value->DestroyComponent();
             }
         }
 
