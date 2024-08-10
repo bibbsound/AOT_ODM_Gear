@@ -30,19 +30,18 @@ private:
 
 	AActor* SpawnedIndicatorActor;
 
-	//AActor* NewIndicator;
-
-	// Keeps track of each grapple target and its grapple indicator
-	TMap<AActor*, AActor*> GrappleTargetIndicators;
-
 	UPROPERTY()
 	TArray<AActor*> SpawnedIndicatorActors;
 
 	// Stores the previous grapple targets
 	TArray<AActor*> PreviousGrappleTargets;
 
-	//UPROPERTY()
-	//TArray<AActor*> ValidGrappleTargets;
+	// Keeps track of each grapple target and its grapple indicator
+	TMap<AActor*, UUserWidget*> GrappleTargetIndicators;
+
+	// The widget to be spawned on screen, when there is a valid grapple point
+	UPROPERTY(EditDefaultsOnly, Category = "Grapple Ability")
+	TSubclassOf<UUserWidget> GrapplePointWidget;
 
 	UPROPERTY()
 	AActor* LineTraceHitActor;
