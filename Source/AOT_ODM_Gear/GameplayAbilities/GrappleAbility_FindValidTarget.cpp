@@ -11,6 +11,7 @@ UGrappleAbility_FindValidTarget::UGrappleAbility_FindValidTarget()
     InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 }
 
+// not used
 void UGrappleAbility_FindValidTarget::PerformLineTrace()
 {
     if (PlayerCharacter)
@@ -61,7 +62,7 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
 {
     if (PlayerCharacter && PlayerController)
     {
-        /* Spawn a sphere trace to find all valid grapple targets */
+        /* Spawn a sphere trace to find all actors in range */
         FVector CameraLocation;
         FRotator CameraRotation;
         PlayerController->GetPlayerViewPoint(CameraLocation, CameraRotation);
@@ -85,7 +86,7 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
             }
         }
 
-        /* Find the best grapple targets */
+        /* Find the best two grapple points (This is based on distance and angle from player)*/
         TArray<AActor*> ValidGrappleTargets;
 
         FVector PlayerForwardVector = PlayerCharacter->GetActorForwardVector();
@@ -95,13 +96,13 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
             FVector DirectionToTarget = (Target->GetActorLocation() - CameraLocation).GetSafeNormal();
             float DotProduct = FVector::DotProduct(PlayerForwardVector, DirectionToTarget);
 
-            if (DotProduct > 0.5f) // Example threshold
+            if (DotProduct > 0.5f) 
             {
                 ValidGrappleTargets.Add(Target);
             }
         }
 
-        /* Sort grapple targets by distance to the camera, this allows for a max of two grapple targets (similiar to ODM)*/
+        /* Sort grapple targets by distance to the camera, this allows for a max of two grapple targets (similiar to ODM) */
         ValidGrappleTargets.Sort([&](const AActor& A, const AActor& B)
             {
                 float DistanceA = FVector::Dist(CameraLocation, A.GetActorLocation());
@@ -109,50 +110,53 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
                 return DistanceA < DistanceB;
             });
 
-        // Find the best two grapple points (This is based on distance and angle from player)
+        // Allow for only 2 grapple points
         if (ValidGrappleTargets.Num() > 2)
         {
             ValidGrappleTargets.SetNum(2);
         }
 
-        // Destroy old indicator actors (Temporary until UI is implemented)
-        for (AActor* Indicator : SpawnedIndicatorActors)
-        {
-            if (Indicator)
-            {
-                Indicator->Destroy();
-            }
-        }
+        // Handle indicators, temporary until UI indicators are used
+        TMap<AActor*, AActor*> NewGrappleTargetIndicators;
 
-        // Empty the array
-        SpawnedIndicatorActors.Empty(); 
-
-        // Spawn new indicator actors for the two best grapple targets
         for (AActor* Target : ValidGrappleTargets)
         {
-            if (Target)
+            if (GrappleTargetIndicators.Contains(Target))
             {
+                // If the indicator already exists, just keep it
+                NewGrappleTargetIndicators.Add(Target, GrappleTargetIndicators[Target]);
+                GrappleTargetIndicators.Remove(Target); 
+            }
+
+            else
+            {
+                // Spawn a new indicator actor if it doesn't already exist
                 FVector SpawnLocation = Target->GetActorLocation();
                 FRotator SpawnRotation = FRotator::ZeroRotator;
 
                 FActorSpawnParameters SpawnParams;
                 SpawnParams.Owner = PlayerCharacter;
 
-                // spawn actor
                 AActor* NewIndicator = GetWorld()->SpawnActor<AActor>(IndicatorClass, SpawnLocation, SpawnRotation, SpawnParams);
                 if (NewIndicator)
                 {
                     NewIndicator->SetActorScale3D(FVector(5.0f));
-                    SpawnedIndicatorActors.Add(NewIndicator); 
+                    NewGrappleTargetIndicators.Add(Target, NewIndicator);
                 }
-
-                // bp tests
-                BP_BestGrappleTarget(Target);
             }
         }
 
-        // Update previous grapple targets
-        PreviousGrappleTargets = ValidGrappleTargets;
+        // Destroy indicators for targets that are no longer valid
+        for (auto& IndicatorPair : GrappleTargetIndicators)
+        {
+            if (IndicatorPair.Value)
+            {
+                IndicatorPair.Value->Destroy();
+            }
+        }
+
+        // Update the map with the current valid targets and their indicators
+        GrappleTargetIndicators = NewGrappleTargetIndicators;
     }
 }
 

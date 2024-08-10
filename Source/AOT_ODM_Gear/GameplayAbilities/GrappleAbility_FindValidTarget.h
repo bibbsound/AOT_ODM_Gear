@@ -30,6 +30,11 @@ private:
 
 	AActor* SpawnedIndicatorActor;
 
+	//AActor* NewIndicator;
+
+	// Keeps track of each grapple target and its grapple indicator
+	TMap<AActor*, AActor*> GrappleTargetIndicators;
+
 	UPROPERTY()
 	TArray<AActor*> SpawnedIndicatorActors;
 
