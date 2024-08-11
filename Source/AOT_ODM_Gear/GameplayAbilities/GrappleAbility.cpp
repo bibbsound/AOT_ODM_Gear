@@ -12,7 +12,7 @@ void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
     {
         if(PlayerCharacter->GetbCanGrapple())
         {
-            UE_LOG(LogTemp, Warning, TEXT("Grapple ability activated, Grapple towards target"));
+            UE_LOG(LogTemp, Warning, TEXT("Valid Grapple Target, Grapple towards target"));
         }
     }
 

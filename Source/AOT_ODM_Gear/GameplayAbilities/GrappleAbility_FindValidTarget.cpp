@@ -113,6 +113,8 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
             if (DotProduct > MaxGrappleAngle)
             {
                 ValidGrappleTargets.Add(Target);
+
+                
             }
         }
 
@@ -171,6 +173,11 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
 
         // Update the map with the current valid targets and their indicators
         GrappleTargetIndicators = NewGrappleTargetIndicators;
+
+        // Allow the player to grapple if there is at least 1 valid grapple target 
+        GrappleTargetIndicators.Num() > 0 ? PlayerCharacter->SetbCanGrapple(true) : PlayerCharacter->SetbCanGrapple(false);
+
+  
     }
 }
 
