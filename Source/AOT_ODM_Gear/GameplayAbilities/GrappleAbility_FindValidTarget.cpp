@@ -7,6 +7,8 @@
 #include "Components/WidgetComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
 
+#include "AOT_ODM_Gear/ODM_Gear.h"
+
 
 UGrappleAbility_FindValidTarget::UGrappleAbility_FindValidTarget()
 {
@@ -93,11 +95,11 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
 
         for (AActor* Target : ValidGrappleTargets)
         {
-            if (GrappleTargetIndicators.Contains(Target))
+            if (PlayerCharacter->GrappleTargetIndicators.Contains(Target))
             {
                 // If the indicator already exists, just keep it
-                NewGrappleTargetIndicators.Add(Target, GrappleTargetIndicators[Target]);
-                GrappleTargetIndicators.Remove(Target);
+                NewGrappleTargetIndicators.Add(Target, PlayerCharacter->GrappleTargetIndicators[Target]);
+                PlayerCharacter->GrappleTargetIndicators.Remove(Target);
             }
 
             else
@@ -119,7 +121,7 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
         }
 
         // Destroy UI indicators for targets that are no longer valid
-        for (auto& IndicatorPair : GrappleTargetIndicators)
+        for (auto& IndicatorPair : PlayerCharacter->GrappleTargetIndicators)
         {
             if (IndicatorPair.Value)
             {
@@ -128,10 +130,10 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
         }
 
         // Update the map with the current valid targets and their indicators
-        GrappleTargetIndicators = NewGrappleTargetIndicators;
+        PlayerCharacter->GrappleTargetIndicators = NewGrappleTargetIndicators;
 
         // Allow the player to grapple if there is at least 1 valid grapple target 
-        GrappleTargetIndicators.Num() > 0 ? PlayerCharacter->SetbCanGrapple(true) : PlayerCharacter->SetbCanGrapple(false);
+        PlayerCharacter->GrappleTargetIndicators.Num() > 0 ? PlayerCharacter->SetbCanGrapple(true) : PlayerCharacter->SetbCanGrapple(false);
     }
 }
 

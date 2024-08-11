@@ -15,19 +15,17 @@ void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
         {
             UE_LOG(LogTemp, Warning, TEXT("Valid Grapple Target, Grapple towards target"));
 
-            // valid targets
             if (PlayerCharacter->GrappleTargetIndicators.Num() > 0)
             {
-                // create iterator over targets 
+                // Get an iterator to the first element in the map
                 auto It = PlayerCharacter->GrappleTargetIndicators.CreateIterator();
 
-                // get the first target
+                // Access the first grapple target
                 AActor* FirstGrappleTarget = It.Key();
 
-               // if valid 
+                // Now you can work with FirstGrappleTarget as needed
                 if (FirstGrappleTarget)
                 {
-                    // Attach the cable to the target 
                     UE_LOG(LogTemp, Log, TEXT("First Grapple Target: %s"), *FirstGrappleTarget->GetName());
                     PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetRightCableComponent(), FirstGrappleTarget);
                 }

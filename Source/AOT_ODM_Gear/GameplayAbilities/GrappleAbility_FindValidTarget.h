@@ -33,7 +33,7 @@ private:
 	TArray<AActor*> PreviousGrappleTargets;
 
 	// Keeps track of each grapple target and its grapple indicator
-	TMap<AActor*, UWidgetComponent*> GrappleTargetIndicators;
+	//TMap<AActor*, UWidgetComponent*> GrappleTargetIndicators;
 
 	// The widget to be spawned on screen, when there is a valid grapple point
 	UPROPERTY(EditDefaultsOnly, Category = "Grapple Ability")

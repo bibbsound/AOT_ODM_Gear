@@ -35,7 +35,8 @@ class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
-class AODM_Gear;
+class AODM_Gear; 
+class UWidgetComponent;
 struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
@@ -85,6 +86,8 @@ private:
 	FName ODM_Gear_Socket;
 
 public:
+
+	TMap<AActor*, UWidgetComponent*> GrappleTargetIndicators; // Used in abilities for grappling
 
 	AODM_Gear* GetODMGearActor() const { return ODM_Gear; }
 
