@@ -29,16 +29,6 @@ private:
 
 	class APlayerController* PlayerController;
 
-	AActor* PreviousGrappleTarget = nullptr;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Grapple Ability")
-	TSubclassOf<AActor> IndicatorClass;
-
-	AActor* SpawnedIndicatorActor;
-
-	UPROPERTY()
-	TArray<AActor*> SpawnedIndicatorActors;
-
 	// Stores the previous grapple targets
 	TArray<AActor*> PreviousGrappleTargets;
 
@@ -48,13 +38,6 @@ private:
 	// The widget to be spawned on screen, when there is a valid grapple point
 	UPROPERTY(EditDefaultsOnly, Category = "Grapple Ability")
 	TSubclassOf<UUserWidget> GrapplePointWidget;
-
-	UPROPERTY()
-	AActor* LineTraceHitActor;
-
-	// Used to find grapple objects directly infront of the player
-	UFUNCTION()
-	void PerformLineTrace();
 
 	UFUNCTION()
 	void PerformSphereTrace();
