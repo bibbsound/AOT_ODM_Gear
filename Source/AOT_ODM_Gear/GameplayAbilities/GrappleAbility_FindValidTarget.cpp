@@ -78,111 +78,99 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
         float SphereRadius = MaxGrappleDistance;
 
         TArray<FHitResult> HitResults;
-        //bool bSphereHit = GetWorld()->SweepMultiByChannel(HitResults, CameraLocation, TraceEnd, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(SphereRadius));
+        bool bSphereHit = GetWorld()->SweepMultiByChannel(HitResults, CameraLocation, CameraLocation, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(SphereRadius));
 
-        //DrawDebugSphere(GetWorld(), CameraLocation, SphereRadius, 12, FColor::Orange, false, 2.0f);
-
-        //bool bLineTraceHit = GetWorld()->LineTraceMultiByChannel(HitResults, CameraLocation, TraceEnd, ECC_Visibility);
-
-        // Draw a debug line to visualize the trace
-        //DrawDebugSphere(GetWorld(), CameraLocation, 100.0f, 12, FColor::Blue, false, 1.0f);
-        //DrawDebugSphere(GetWorld(), TraceEnd, 100.0f, 12, FColor::Red, false, 1.0f);
-
-        //FCollisionShape MySphere = FCollisionShape::MakeSphere(SphereRadius); // 5M Radius
-        //bool b1 = GetWorld()->SweepMultiByChannel(HitResults, CameraLocation, TraceEnd, FQuat::Identity, ECC_Visibility, MySphere);
-        //DrawDebugSphere(GetWorld(), CameraLocation, SphereRadius, 12, FColor::Orange, false, 2.0f);
-
-        
-       
+        DrawDebugSphere(GetWorld(), CameraLocation, SphereRadius, 12, FColor::Orange, false, 2.0f);
 
         /* Find valid grapple targets */
+		TArray<AActor*> AllGrappleTargets;
 
-       /* if(b1)
+        // Loop over all actors hit in the trace
+		for (const FHitResult& Hit : HitResults)
+		{
+			AActor* HitActor = Hit.GetActor();
+
+            // Check the hit actors tag
+			if (HitActor && HitActor->ActorHasTag(FName("GrappleTarget")))
+			{
+                // Add grapple targets to array
+				AllGrappleTargets.Add(HitActor);
+
+				//UE_LOG(LogTemp, Warning, TEXT("Grapple Actor: %s"), *HitActor->GetFullName());
+			}
+		}
+        
+        /* Find the best two grapple points (This is based on distance and angle from player) */
+        TArray<AActor*> ValidGrappleTargets;
+
+        FVector PlayerForwardVector = PlayerCharacter->GetActorForwardVector();
+
+        for (AActor* Target : AllGrappleTargets)
         {
-            TArray<AActor*> AllGrappleTargets;
-            for (const FHitResult& Hit : HitResults)
-            {
-                AActor* HitActor = Hit.GetActor();
-                if (HitActor && HitActor->ActorHasTag(FName("GrappleTarget")))
-                {
-                    AllGrappleTargets.Add(HitActor);
+            FVector DirectionToTarget = (Target->GetActorLocation() - CameraLocation).GetSafeNormal();
+            float DotProduct = FVector::DotProduct(PlayerForwardVector, DirectionToTarget);
 
-                    UE_LOG(LogTemp, Warning, TEXT("Grapple Actor: %s"), *HitActor->GetFullName());
+            if (DotProduct > MaxGrappleAngle)
+            {
+                ValidGrappleTargets.Add(Target);
+            }
+        }
+
+        /* Sort grapple targets by distance to the camera, this allows for a max of two grapple targets (similar to ODM) */
+        ValidGrappleTargets.Sort([&](const AActor& A, const AActor& B)
+            {
+                float DistanceA = FVector::Dist(CameraLocation, A.GetActorLocation());
+                float DistanceB = FVector::Dist(CameraLocation, B.GetActorLocation());
+                return DistanceA < DistanceB;
+            });
+
+        // Allow for only 2 grapple points
+        if (ValidGrappleTargets.Num() > 2)
+        {
+            ValidGrappleTargets.SetNum(2);
+        }
+
+        // Handle UI indicators
+        TMap<AActor*, UWidgetComponent*> NewGrappleTargetIndicators;
+
+        for (AActor* Target : ValidGrappleTargets)
+        {
+            if (GrappleTargetIndicators.Contains(Target))
+            {
+                // If the indicator already exists, just keep it
+                NewGrappleTargetIndicators.Add(Target, GrappleTargetIndicators[Target]);
+                GrappleTargetIndicators.Remove(Target);
+            }
+
+            else
+            {
+                // Create a new widget component for the grapple point
+                UWidgetComponent* WidgetComp = NewObject<UWidgetComponent>(Target);
+
+                if (WidgetComp && GrapplePointWidget)
+                {
+                    WidgetComp->SetupAttachment(Target->GetRootComponent()); // Attach to the target actor
+                    WidgetComp->SetWidgetClass(GrapplePointWidget);
+                    WidgetComp->SetRelativeLocation(FVector::ZeroVector);
+                    WidgetComp->SetWidgetSpace(EWidgetSpace::Screen); // Use screen space for 2D UI
+                    WidgetComp->RegisterComponent();
+
+                    NewGrappleTargetIndicators.Add(Target, WidgetComp);
                 }
             }
-        }*/
-       
+        }
 
-        /* Find the best two grapple points (This is based on distance and angle from player)*/
-        //TArray<AActor*> ValidGrappleTargets;
+        // Destroy UI indicators for targets that are no longer valid
+        for (auto& IndicatorPair : GrappleTargetIndicators)
+        {
+            if (IndicatorPair.Value)
+            {
+                IndicatorPair.Value->DestroyComponent();
+            }
+        }
 
-        //FVector PlayerForwardVector = PlayerCharacter->GetActorForwardVector();
-
-        //for (AActor* Target : AllGrappleTargets)
-        //{
-        //    FVector DirectionToTarget = (Target->GetActorLocation() - CameraLocation).GetSafeNormal();
-        //    float DotProduct = FVector::DotProduct(PlayerForwardVector, DirectionToTarget);
-
-        //    if (DotProduct > MaxGrappleAngle)
-        //    {
-        //        ValidGrappleTargets.Add(Target);
-        //    }
-        //}
-
-        ///* Sort grapple targets by distance to the camera, this allows for a max of two grapple targets (similar to ODM) */
-        //ValidGrappleTargets.Sort([&](const AActor& A, const AActor& B)
-        //    {
-        //        float DistanceA = FVector::Dist(CameraLocation, A.GetActorLocation());
-        //        float DistanceB = FVector::Dist(CameraLocation, B.GetActorLocation());
-        //        return DistanceA < DistanceB;
-        //    });
-
-        //// Allow for only 2 grapple points
-        //if (ValidGrappleTargets.Num() > 2)
-        //{
-        //    ValidGrappleTargets.SetNum(2);
-        //}
-
-        //// Handle indicators, temporary until UI indicators are used
-        //TMap<AActor*, UWidgetComponent*> NewGrappleTargetIndicators;
-
-        //for (AActor* Target : ValidGrappleTargets)
-        //{
-        //    if (GrappleTargetIndicators.Contains(Target))
-        //    {
-        //        // If the indicator already exists, just keep it
-        //        NewGrappleTargetIndicators.Add(Target, GrappleTargetIndicators[Target]);
-        //        GrappleTargetIndicators.Remove(Target);
-        //    }
-        //    else
-        //    {
-        //        // Create a new widget component for the grapple point
-        //        UWidgetComponent* WidgetComp = NewObject<UWidgetComponent>(Target);
-
-        //        if (WidgetComp && GrapplePointWidget)
-        //        {
-        //            WidgetComp->SetupAttachment(Target->GetRootComponent()); // Attach to the target actor
-        //            WidgetComp->SetWidgetClass(GrapplePointWidget);
-        //            WidgetComp->SetRelativeLocation(FVector::ZeroVector);
-        //            WidgetComp->SetWidgetSpace(EWidgetSpace::Screen); // Use screen space for 2D UI
-        //            WidgetComp->RegisterComponent();
-
-        //            NewGrappleTargetIndicators.Add(Target, WidgetComp);
-        //        }
-        //    }
-        //}
-
-        //// Destroy indicators for targets that are no longer valid
-        //for (auto& IndicatorPair : GrappleTargetIndicators)
-        //{
-        //    if (IndicatorPair.Value)
-        //    {
-        //        IndicatorPair.Value->DestroyComponent();
-        //    }
-        //}
-
-        //// Update the map with the current valid targets and their indicators
-        //GrappleTargetIndicators = NewGrappleTargetIndicators;
+        // Update the map with the current valid targets and their indicators
+        GrappleTargetIndicators = NewGrappleTargetIndicators;
     }
 }
 
