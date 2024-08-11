@@ -4,6 +4,7 @@
 #include "AOT_ODM_Gear/GameplayAbilities/GrappleAbility.h"
 #include "AOT_ODM_Gear/AOT_ODM_GearCharacter.h"
 #include "AOT_ODM_Gear/ODM_Gear.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
@@ -31,6 +32,14 @@ void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
                     UE_LOG(LogTemp, Log, TEXT("First Grapple Target: %s"), *FirstGrappleTarget->GetName());
                     PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetRightCableComponent(), FirstGrappleTarget);
                     PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetLeftCableComponent(), FirstGrappleTarget);
+
+
+                    FVector CurrentLocation = PlayerCharacter->GetActorLocation();
+                    FVector DirectionToTarget = (FirstGrappleTarget->GetActorLocation() - CurrentLocation).GetSafeNormal();
+                    FVector Force = DirectionToTarget * GrapplePullForce;
+
+                    // Apply force to move the player towards the target
+                    PlayerCharacter->GetCharacterMovement()->AddForce(Force);
                 }
 
             }
