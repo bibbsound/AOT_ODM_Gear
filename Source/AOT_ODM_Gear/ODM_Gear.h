@@ -33,10 +33,16 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Cable")
 	UCableComponent* RightCableComponent;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Cable")
+	UCableComponent* LeftCableComponent;
+
 public:
 	
 	UFUNCTION(BlueprintCallable)
 	UCableComponent* GetRightCableComponent() const { return RightCableComponent; }
+
+	UFUNCTION(BlueprintCallable)
+	UCableComponent* GetLeftCableComponent() const { return LeftCableComponent; }
 
 	void AttachGrappleCable(UCableComponent* Cable, AActor* AttachedActor);
 

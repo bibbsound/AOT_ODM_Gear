@@ -30,6 +30,7 @@ void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
                     // Attach the cable to the target 
                     UE_LOG(LogTemp, Log, TEXT("First Grapple Target: %s"), *FirstGrappleTarget->GetName());
                     PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetRightCableComponent(), FirstGrappleTarget);
+                    PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetLeftCableComponent(), FirstGrappleTarget);
                 }
 
             }
