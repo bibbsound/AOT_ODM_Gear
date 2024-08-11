@@ -3,6 +3,7 @@
 
 #include "AOT_ODM_Gear/GameplayAbilities/GrappleAbility.h"
 #include "AOT_ODM_Gear/AOT_ODM_GearCharacter.h"
+#include "AOT_ODM_Gear/ODM_Gear.h"
 
 void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
@@ -13,6 +14,8 @@ void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
         if(PlayerCharacter->GetbCanGrapple())
         {
             UE_LOG(LogTemp, Warning, TEXT("Valid Grapple Target, Grapple towards target"));
+
+            PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetRightCableComponent(), PlayerCharacter);
         }
     }
 

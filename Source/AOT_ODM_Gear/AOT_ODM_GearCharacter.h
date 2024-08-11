@@ -35,6 +35,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
+class AODM_Gear;
 struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
@@ -76,12 +77,20 @@ private:
 	// Allows the player to grapple to a grapple point
 	bool bCanGrapple;
 
+	AODM_Gear* ODM_Gear;
+
+	UPROPERTY(EditDefaultsOnly, Category = "ODM_Gear")
+	TSubclassOf<AODM_Gear> ODM_GearClass;
+
+	FName ODM_Gear_Socket;
+
 public:
+
+	AODM_Gear* GetODMGearActor() const { return ODM_Gear; }
 
 	void SetbCanGrapple(bool NewValue) { bCanGrapple = NewValue; }
 
 	bool GetbCanGrapple() const { return bCanGrapple; }
-
 
 	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
 	TSubclassOf<UGameplayAbility> GrappleAbilityFindValidTarget;

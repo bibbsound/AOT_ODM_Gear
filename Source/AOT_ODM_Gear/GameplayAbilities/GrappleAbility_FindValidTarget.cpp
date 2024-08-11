@@ -52,7 +52,7 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
                 // Add grapple targets to array
 				AllGrappleTargets.Add(HitActor);
 
-                DrawDebugSphere(GetWorld(), Hit.ImpactPoint, 20.0f, 12, FColor::Emerald, false, 2.0f);
+                //DrawDebugSphere(GetWorld(), Hit.ImpactPoint, 20.0f, 12, FColor::Emerald, false, 2.0f);
 
 				//UE_LOG(LogTemp, Warning, TEXT("Grapple Actor: %s"), *HitActor->GetFullName());
 			}

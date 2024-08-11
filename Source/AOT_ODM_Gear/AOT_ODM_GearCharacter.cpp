@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "ODM_Gear.h"
 
 #include "GameplayAbilities/GameplayAbilityInputs.h"
 #include "AbilitySystemComponent.h"
@@ -63,7 +64,7 @@ AAOT_ODM_GearCharacter::AAOT_ODM_GearCharacter()
 
 	bCanGrapple = false;
 
-	
+	ODM_Gear_Socket = "ODM_Socket";
 }
 
 void AAOT_ODM_GearCharacter::BeginPlay()
@@ -76,6 +77,21 @@ void AAOT_ODM_GearCharacter::BeginPlay()
 	{
 		SetupInitialAbilitiesAndEffects();
 	}
+
+	FTransform SpawnSocketTransform = GetMesh()->GetSocketTransform(ODM_Gear_Socket);
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+	SpawnParams.Instigator = GetInstigator();
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	ODM_Gear = GetWorld()->SpawnActor<AODM_Gear>(ODM_GearClass, SpawnSocketTransform.GetLocation(), SpawnSocketTransform.GetRotation().Rotator(), SpawnParams);
+	if(ODM_Gear)
+	{
+		FAttachmentTransformRules TransformRules = FAttachmentTransformRules::SnapToTargetIncludingScale;
+		ODM_Gear->AttachToComponent(GetMesh(), TransformRules, ODM_Gear_Socket);
+	}
+
 }
 
 void AAOT_ODM_GearCharacter::Tick(float DeltaTime)

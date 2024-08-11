@@ -11,7 +11,8 @@ public class AOT_ODM_Gear : ModuleRules
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", 
 			"GameplayAbilities", "GameplayTags", "GameplayTasks", 
-			"UMG","Slate","SlateCore"
+			"UMG","Slate","SlateCore",
+            "CableComponent"
  });
 	}
 }
