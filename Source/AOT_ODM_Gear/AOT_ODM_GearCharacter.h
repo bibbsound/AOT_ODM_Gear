@@ -75,6 +75,8 @@ class AAOT_ODM_GearCharacter : public ACharacter, public IAbilitySystemInterface
 
 private:
 
+	
+
 	// in future will be tied to picking up or equipping grapple ability from loadout system
 	bool bShouldActivateGrappleAbility;
 
@@ -94,7 +96,12 @@ private:
 
 	void StopGrapple();
 
+	bool bHasBeenLaunched;
+
 public:
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_GrappleTarget(AActor* Target);
 
 	void SetbIsGrappling(bool NewValue) { bIsGrappling = NewValue; }
 

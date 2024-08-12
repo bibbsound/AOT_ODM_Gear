@@ -105,7 +105,40 @@ void AAOT_ODM_GearCharacter::Tick(float DeltaTime)
 
 	if(bIsGrappling)
 	{
+		if (GrappleTargetIndicators.Num() > 0)
+		{
+			// create iterator over targets 
+			auto It = GrappleTargetIndicators.CreateIterator();
 
+			// get the first target
+			AActor* FirstGrappleTarget = It.Key();
+
+			// if valid 
+			if (FirstGrappleTarget)
+			{
+				FVector GrappleTargetLocation = FirstGrappleTarget->GetActorLocation();
+				FVector PlayerLocation = GetActorLocation();
+				FVector DirectionToGrapple = GrappleTargetLocation - PlayerLocation;
+				FVector DirectionToGrappleNormalized = DirectionToGrapple.GetSafeNormal();
+				float DistanceToGrapple = DirectionToGrapple.Size();
+
+				// Launch towards the target
+				if (!bHasBeenLaunched)
+				{
+					FVector LaunchForce = DirectionToGrappleNormalized * 3000; // Adjust LaunchStrength to control launch speed
+					GetCharacterMovement()->Launch(LaunchForce);
+					
+					bHasBeenLaunched = true;
+				}
+
+				
+			}
+
+			
+
+		}
+
+		
 	}
 }
 
@@ -199,6 +232,8 @@ void AAOT_ODM_GearCharacter::StartGrapple()
 		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
 
 		UE_LOG(LogTemp, Warning, TEXT("Grappling"));
+
+		GetCharacterMovement()->GravityScale = 0.2f;
 	}
 }
 
@@ -210,6 +245,10 @@ void AAOT_ODM_GearCharacter::StopGrapple()
 		bIsGrappling = false;
 
 		UE_LOG(LogTemp, Error, TEXT("Grappling FINISHED"));
+
+		bHasBeenLaunched = false;
+
+		GetCharacterMovement()->GravityScale = 1.0f;
 	}
 }
 

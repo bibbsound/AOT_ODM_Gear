@@ -34,6 +34,16 @@ void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
                     PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetLeftCableComponent(), FirstGrappleTarget);
                     //PlayerCharacter->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
                     PlayerCharacter->SetbIsGrappling(true);
+
+       
+
+                    // temp
+                    //FVector CurrentLocation = PlayerCharacter->GetActorLocation();
+                    //FVector DirectionToTarget = (FirstGrappleTarget->GetActorLocation() - CurrentLocation).GetSafeNormal();
+                    //FVector Force = DirectionToTarget * GrapplePullForce;
+
+                    // Apply force to move the player towards the target
+                    //PlayerCharacter->GetCharacterMovement()->AddForce(Force);
                 }
 
             }
