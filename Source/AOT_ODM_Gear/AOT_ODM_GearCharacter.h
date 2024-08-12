@@ -70,6 +70,9 @@ class AAOT_ODM_GearCharacter : public ACharacter, public IAbilitySystemInterface
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* GrappleAction;
+
 private:
 
 	// in future will be tied to picking up or equipping grapple ability from loadout system
@@ -85,7 +88,16 @@ private:
 
 	FName ODM_Gear_Socket;
 
+	bool bIsGrappling = false;
+
+	void StartGrapple();
+
+	void StopGrapple();
+
 public:
+
+	void SetbIsGrappling(bool NewValue) { bIsGrappling = NewValue; }
+
 
 	TMap<AActor*, UWidgetComponent*> GrappleTargetIndicators; // Used in abilities for grappling
 

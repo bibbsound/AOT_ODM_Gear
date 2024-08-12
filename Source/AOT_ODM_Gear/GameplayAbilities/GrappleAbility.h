@@ -17,5 +17,7 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Ability")
 	float GrapplePullForce;
 
+
+
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 };

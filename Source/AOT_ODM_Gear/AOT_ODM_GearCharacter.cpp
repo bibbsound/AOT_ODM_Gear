@@ -102,6 +102,11 @@ void AAOT_ODM_GearCharacter::Tick(float DeltaTime)
 	{
 		AbilitySystemComp->TryActivateAbilityByClass(GrappleAbilityFindValidTarget);
 	}
+
+	if(bIsGrappling)
+	{
+
+	}
 }
 
 #pragma region Inputs
@@ -123,6 +128,9 @@ void AAOT_ODM_GearCharacter::SetupPlayerInputComponent(UInputComponent* PlayerIn
 		// Jumping
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+
+		EnhancedInputComponent->BindAction(GrappleAction, ETriggerEvent::Started, this, &AAOT_ODM_GearCharacter::StartGrapple);
+		EnhancedInputComponent->BindAction(GrappleAction, ETriggerEvent::Completed, this, &AAOT_ODM_GearCharacter::StopGrapple);
 
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &AAOT_ODM_GearCharacter::Move);
@@ -183,6 +191,27 @@ void AAOT_ODM_GearCharacter::Look(const FInputActionValue& Value)
 #pragma endregion
 
 #pragma region Gameplay Abilities
+
+void AAOT_ODM_GearCharacter::StartGrapple()
+{
+	if(bIsGrappling)
+	{
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
+
+		UE_LOG(LogTemp, Warning, TEXT("Grappling"));
+	}
+}
+
+void AAOT_ODM_GearCharacter::StopGrapple()
+{
+	if(bIsGrappling)
+	{
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Falling);
+		bIsGrappling = false;
+
+		UE_LOG(LogTemp, Error, TEXT("Grappling FINISHED"));
+	}
+}
 
 void AAOT_ODM_GearCharacter::SetupInitialAbilitiesAndEffects()
 {
