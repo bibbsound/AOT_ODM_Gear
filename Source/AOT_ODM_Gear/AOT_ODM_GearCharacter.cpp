@@ -103,43 +103,36 @@ void AAOT_ODM_GearCharacter::Tick(float DeltaTime)
 		AbilitySystemComp->TryActivateAbilityByClass(GrappleAbilityFindValidTarget);
 	}
 
-	if(bIsGrappling)
-	{
-		if (GrappleTargetIndicators.Num() > 0)
-		{
-			// create iterator over targets 
-			auto It = GrappleTargetIndicators.CreateIterator();
+	//if(bIsGrappling)
+	//{
+	//	if (GrappleTargetIndicators.Num() > 0)
+	//	{
+	//		// create iterator over targets 
+	//		auto It = GrappleTargetIndicators.CreateIterator();
 
-			// get the first target
-			AActor* FirstGrappleTarget = It.Key();
+	//		// get the first target
+	//		AActor* FirstGrappleTarget = It.Key();
 
-			// if valid 
-			if (FirstGrappleTarget)
-			{
-				FVector GrappleTargetLocation = FirstGrappleTarget->GetActorLocation();
-				FVector PlayerLocation = GetActorLocation();
-				FVector DirectionToGrapple = GrappleTargetLocation - PlayerLocation;
-				FVector DirectionToGrappleNormalized = DirectionToGrapple.GetSafeNormal();
-				float DistanceToGrapple = DirectionToGrapple.Size();
+	//		// if valid 
+	//		if (FirstGrappleTarget)
+	//		{
+	//			FVector GrappleTargetLocation = FirstGrappleTarget->GetActorLocation();
+	//			FVector PlayerLocation = GetActorLocation();
+	//			FVector DirectionToGrapple = GrappleTargetLocation - PlayerLocation;
+	//			FVector DirectionToGrappleNormalized = DirectionToGrapple.GetSafeNormal();
+	//			float DistanceToGrapple = DirectionToGrapple.Size();
 
-				// Launch towards the target
-				if (!bHasBeenLaunched)
-				{
-					FVector LaunchForce = DirectionToGrappleNormalized * 3000; // Adjust LaunchStrength to control launch speed
-					GetCharacterMovement()->Launch(LaunchForce);
-					
-					bHasBeenLaunched = true;
-				}
-
-				
-			}
-
-			
-
-		}
-
-		
-	}
+	//			// Launch towards the target
+	//			if (!bHasBeenLaunched)
+	//			{
+	//				FVector LaunchForce = DirectionToGrappleNormalized * 3000; // Adjust LaunchStrength to control launch speed
+	//				GetCharacterMovement()->Launch(LaunchForce);
+	//				
+	//				bHasBeenLaunched = true;
+	//			}
+	//		}
+	//	}
+	//}
 }
 
 #pragma region Inputs

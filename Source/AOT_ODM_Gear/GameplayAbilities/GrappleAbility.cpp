@@ -19,22 +19,53 @@ void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
             // valid targets
             if (PlayerCharacter->GrappleTargetIndicators.Num() > 0)
             {
-                // create iterator over targets 
-                auto It = PlayerCharacter->GrappleTargetIndicators.CreateIterator();
+               // // create iterator over targets 
+               // auto It = PlayerCharacter->GrappleTargetIndicators.CreateIterator();
 
-                // get the first target
-                AActor* FirstGrappleTarget = It.Key();
+               // // get the first target
+               // AActor* FirstGrappleTarget = It.Key();
 
-               // if valid 
-                if (FirstGrappleTarget)
+               //// if valid 
+               // if (FirstGrappleTarget)
+               // {
+               //     // Attach the cable to the target 
+               //     UE_LOG(LogTemp, Log, TEXT("First Grapple Target: %s"), *FirstGrappleTarget->GetName());
+               //     PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetRightCableComponent(), FirstGrappleTarget);
+               //     PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetLeftCableComponent(), FirstGrappleTarget);
+               //     //PlayerCharacter->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
+               //     PlayerCharacter->SetbIsGrappling(true);
+               // }
+
+                TArray<AActor*> TargetKeys;
+                PlayerCharacter->GrappleTargetIndicators.GetKeys(TargetKeys);
+
+
+                // two valid grapple targets
+                if(TargetKeys.Num() == 2)
                 {
-                    // Attach the cable to the target 
-                    UE_LOG(LogTemp, Log, TEXT("First Grapple Target: %s"), *FirstGrappleTarget->GetName());
-                    PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetRightCableComponent(), FirstGrappleTarget);
-                    PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetLeftCableComponent(), FirstGrappleTarget);
-                    //PlayerCharacter->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
-                    PlayerCharacter->SetbIsGrappling(true);
+                    UE_LOG(LogTemp, Warning, TEXT("Two grapple targets "))
                 }
+
+                // 1 valid grapple target 
+                else if(TargetKeys.Num() == 1) 
+                {
+                    UE_LOG(LogTemp, Warning, TEXT("one  grapple target "))
+                }
+
+                // No valid grapple targets 
+                else
+                {
+                    return;
+                }
+
+
+
+
+
+
+
+
+
 
             }
         }
