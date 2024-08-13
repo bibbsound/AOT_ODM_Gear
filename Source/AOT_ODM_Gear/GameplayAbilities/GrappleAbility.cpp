@@ -65,23 +65,23 @@ void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
                     float DistanceToLeftCable = (GrappleTargetLocation - LeftCableLocation).Length();
                     float DistanceToRightCable = (GrappleTargetLocation - RightCableLocation).Length();
 
-                    UE_LOG(LogTemp, Warning, TEXT("Left Cable dist: %f"), DistanceToLeftCable);
-                    UE_LOG(LogTemp, Warning, TEXT("Right Cable dist: %f"), DistanceToRightCable);
+                    //UE_LOG(LogTemp, Warning, TEXT("Left Cable dist: %f"), DistanceToLeftCable);
+                    //UE_LOG(LogTemp, Warning, TEXT("Right Cable dist: %f"), DistanceToRightCable);
 
                     // If the left cable is closer to target
                     if(DistanceToLeftCable < DistanceToRightCable)
                     {
-                        UE_LOG(LogTemp, Warning, TEXT("Left Cable is closer"));
+                        //UE_LOG(LogTemp, Warning, TEXT("Left Cable is closer"));
                         PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetLeftCableComponent(), GrapleTarget);
                     }
 
                     else
                     {
-                        UE_LOG(LogTemp, Warning, TEXT("Right Cable is closer"));
+                        //UE_LOG(LogTemp, Warning, TEXT("Right Cable is closer"));
                         PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetRightCableComponent(), GrapleTarget);
                     }
 
-                    //PlayerCharacter->SetbIsGrappling(true);
+                    PlayerCharacter->SetbIsGrappling(true);
                 }
 
                 // No valid grapple targets 

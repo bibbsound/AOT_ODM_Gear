@@ -46,4 +46,6 @@ public:
 
 	void AttachGrappleCable(UCableComponent* Cable, AActor* AttachedActor);
 
+	void DetattachGrappleCable(UCableComponent* Cable);
+
 };

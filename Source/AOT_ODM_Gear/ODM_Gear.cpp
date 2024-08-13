@@ -42,3 +42,9 @@ void AODM_Gear::AttachGrappleCable(UCableComponent* Cable, AActor* AttachedActor
 	//LeftCableComponent->SetAttachEndTo(AttachedActor, NAME_None, FName());
 }
 
+void AODM_Gear::DetattachGrappleCable(UCableComponent* Cable)
+{
+	Cable->SetAttachEndTo(nullptr, NAME_None, FName());
+	UE_LOG(LogTemp, Warning, TEXT("Detach cable"));
+}
+

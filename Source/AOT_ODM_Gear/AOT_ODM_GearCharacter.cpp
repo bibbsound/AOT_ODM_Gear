@@ -222,11 +222,11 @@ void AAOT_ODM_GearCharacter::StartGrapple()
 {
 	if(bIsGrappling)
 	{
-		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
+		//GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
 
 		//UE_LOG(LogTemp, Warning, TEXT("Grappling"));
 
-		GetCharacterMovement()->GravityScale = 0.2f;
+		//GetCharacterMovement()->GravityScale = 0.2f;
 	}
 }
 
@@ -234,14 +234,19 @@ void AAOT_ODM_GearCharacter::StopGrapple()
 {
 	if(bIsGrappling)
 	{
-		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Falling);
+		//GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Falling);
 		bIsGrappling = false;
+
+		//@TODO check which cable is attached and detach that cable
+		ODM_Gear->DetattachGrappleCable(ODM_Gear->GetLeftCableComponent());
+		ODM_Gear->DetattachGrappleCable(ODM_Gear->GetRightCableComponent());
+
 
 		//UE_LOG(LogTemp, Error, TEXT("Grappling FINISHED"));
 
 		bHasBeenLaunched = false;
 
-		GetCharacterMovement()->GravityScale = 1.0f;
+		//GetCharacterMovement()->GravityScale = 1.0f;
 	}
 }
 
