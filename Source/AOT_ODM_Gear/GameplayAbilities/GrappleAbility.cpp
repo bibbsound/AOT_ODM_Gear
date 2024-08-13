@@ -19,35 +19,58 @@ void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
             // valid targets
             if (PlayerCharacter->GrappleTargetIndicators.Num() > 0)
             {
-               // // create iterator over targets 
-               // auto It = PlayerCharacter->GrappleTargetIndicators.CreateIterator();
-
-               // // get the first target
-               // AActor* FirstGrappleTarget = It.Key();
-
-               //// if valid 
-               // if (FirstGrappleTarget)
-               // {
-               //     // Attach the cable to the target 
-               //     UE_LOG(LogTemp, Log, TEXT("First Grapple Target: %s"), *FirstGrappleTarget->GetName());
-               //     PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetRightCableComponent(), FirstGrappleTarget);
-               //     PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetLeftCableComponent(), FirstGrappleTarget);
-               //     PlayerCharacter->SetbIsGrappling(true);
-               // }
-
                 TArray<AActor*> TargetKeys;
                 PlayerCharacter->GrappleTargetIndicators.GetKeys(TargetKeys);
-
 
                 // two valid grapple targets
                 if(TargetKeys.Num() == 2)
                 {
                     UE_LOG(LogTemp, Warning, TEXT("Two grapple targets "));
 
-                    AActor* FirstGrapleTarget = TargetKeys[0];
+                    AActor* FirstGrappleTarget = TargetKeys[0];
                     AActor* SecondGrappleTarget = TargetKeys[1];
+
+                    // Get locations of cable components in world space
+                    FVector LeftCableLocation = PlayerCharacter->GetODMGearActor()->GetLeftCableComponent()->GetComponentLocation();
+                    FVector RightCableLocation = PlayerCharacter->GetODMGearActor()->GetRightCableComponent()->GetComponentLocation();
+
+                    FVector FirstGrappleTargetLocation = FirstGrappleTarget->GetActorLocation();
+
+                    // Calculate distance from cables to grapple target
+                    float DistanceToLeftCable = (FirstGrappleTargetLocation - LeftCableLocation).Length();
+                    float DistanceToRightCable = (FirstGrappleTargetLocation - RightCableLocation).Length();
+
+                    // If the left cable is closer to the first grapple target
+                    if (DistanceToLeftCable < DistanceToRightCable)
+                    {
+                        //UE_LOG(LogTemp, Warning, TEXT("Left Cable is closer"));
+                        PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetLeftCableComponent(), FirstGrappleTarget);
+                        PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetRightCableComponent(), SecondGrappleTarget);
+                    }
+
+                    // if the right cable is closer to the first grapple target
+                    else
+                    {
+                        //UE_LOG(LogTemp, Warning, TEXT("Right Cable is closer"));
+                        PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetRightCableComponent(), FirstGrappleTarget);
+                        PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetLeftCableComponent(), SecondGrappleTarget);
+                    }
+
+                    PlayerCharacter->SetbIsGrappling(true);
+
+
+
+
+
+
+
+
+
+
+                    // @TODO if two targets fire a cable at each target
                 }
 
+                // @TODO if player is direcly looking at 1 object -> fire both cables at same object 
                 // 1 valid grapple target 
                 else if(TargetKeys.Num() == 1) 
                 {
@@ -89,16 +112,6 @@ void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
                 {
                     return;
                 }
-
-
-
-
-
-
-
-
-
-
             }
         }
     }
