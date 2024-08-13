@@ -32,7 +32,6 @@ void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
                //     UE_LOG(LogTemp, Log, TEXT("First Grapple Target: %s"), *FirstGrappleTarget->GetName());
                //     PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetRightCableComponent(), FirstGrappleTarget);
                //     PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetLeftCableComponent(), FirstGrappleTarget);
-               //     //PlayerCharacter->GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
                //     PlayerCharacter->SetbIsGrappling(true);
                // }
 
@@ -73,13 +72,16 @@ void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
                     if(DistanceToLeftCable < DistanceToRightCable)
                     {
                         UE_LOG(LogTemp, Warning, TEXT("Left Cable is closer"));
+                        PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetLeftCableComponent(), GrapleTarget);
                     }
 
                     else
                     {
                         UE_LOG(LogTemp, Warning, TEXT("Right Cable is closer"));
+                        PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetRightCableComponent(), GrapleTarget);
                     }
 
+                    //PlayerCharacter->SetbIsGrappling(true);
                 }
 
                 // No valid grapple targets 

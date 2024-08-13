@@ -36,7 +36,9 @@ void AODM_Gear::Tick(float DeltaTime)
 
 void AODM_Gear::AttachGrappleCable(UCableComponent* Cable, AActor* AttachedActor)
 {
-	RightCableComponent->SetAttachEndTo(AttachedActor, NAME_None, FName());
-	LeftCableComponent->SetAttachEndTo(AttachedActor, NAME_None, FName());
+	Cable->SetAttachEndTo(AttachedActor, NAME_None, FName());
+
+	//RightCableComponent->SetAttachEndTo(AttachedActor, NAME_None, FName());
+	//LeftCableComponent->SetAttachEndTo(AttachedActor, NAME_None, FName());
 }
 
