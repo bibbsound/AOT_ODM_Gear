@@ -56,13 +56,11 @@ void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
 
                     AActor* GrapleTarget = TargetKeys[0];
 
-                    // Get locations of cable components in world space
                     FVector LeftCableLocation = PlayerCharacter->GetODMGearActor()->GetLeftCableComponent()->GetComponentLocation();
                     FVector RightCableLocation = PlayerCharacter->GetODMGearActor()->GetRightCableComponent()->GetComponentLocation();
 
                     FVector GrappleTargetLocation = GrapleTarget->GetActorLocation();
 
-                    // Calculate distance from cables to grapple target
                     float DistanceToLeftCable = (GrappleTargetLocation - LeftCableLocation).Length();
                     float DistanceToRightCable = (GrappleTargetLocation - RightCableLocation).Length();
 
