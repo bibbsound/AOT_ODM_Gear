@@ -224,7 +224,7 @@ void AAOT_ODM_GearCharacter::StartGrapple()
 	{
 		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
 
-		UE_LOG(LogTemp, Warning, TEXT("Grappling"));
+		//UE_LOG(LogTemp, Warning, TEXT("Grappling"));
 
 		GetCharacterMovement()->GravityScale = 0.2f;
 	}
@@ -237,7 +237,7 @@ void AAOT_ODM_GearCharacter::StopGrapple()
 		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Falling);
 		bIsGrappling = false;
 
-		UE_LOG(LogTemp, Error, TEXT("Grappling FINISHED"));
+		//UE_LOG(LogTemp, Error, TEXT("Grappling FINISHED"));
 
 		bHasBeenLaunched = false;
 

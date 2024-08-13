@@ -43,13 +43,43 @@ void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
                 // two valid grapple targets
                 if(TargetKeys.Num() == 2)
                 {
-                    UE_LOG(LogTemp, Warning, TEXT("Two grapple targets "))
+                    UE_LOG(LogTemp, Warning, TEXT("Two grapple targets "));
+
+                    AActor* FirstGrapleTarget = TargetKeys[0];
+                    AActor* SecondGrappleTarget = TargetKeys[1];
                 }
 
                 // 1 valid grapple target 
                 else if(TargetKeys.Num() == 1) 
                 {
-                    UE_LOG(LogTemp, Warning, TEXT("one  grapple target "))
+                    UE_LOG(LogTemp, Warning, TEXT("one  grapple target "));
+
+                    AActor* GrapleTarget = TargetKeys[0];
+
+                    FVector GrappleTargetRV = GrapleTarget->GetActorRightVector();
+                    FVector GrappleTargetFV = GrapleTarget->GetActorForwardVector();
+
+                    FVector TargetToPlayer = GrapleTarget->GetActorLocation() - PlayerCharacter->GetActorLocation();
+                    TargetToPlayer.Normalize();
+
+                    FVector Cross = FVector::CrossProduct(GrappleTargetFV, TargetToPlayer);
+
+                    //float Angle = FVector::DotProduct(GrappleTargetRV, TargetToPlayer);
+
+                    if(Cross.Z > 0)
+                    {
+                        UE_LOG(LogTemp, Warning, TEXT("Player is to the right of target "));
+                    }
+
+                    else if(Cross.Z < 0)
+                    {
+                        UE_LOG(LogTemp, Warning, TEXT("Player is to the left of target "));
+                    }
+
+                    else
+                    {
+                        UE_LOG(LogTemp, Warning, TEXT("Player is to infront of target "));
+                    }
                 }
 
                 // No valid grapple targets 
