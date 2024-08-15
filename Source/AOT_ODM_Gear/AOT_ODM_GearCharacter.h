@@ -98,10 +98,15 @@ private:
 
 	bool bHasBeenLaunched;
 
+	
+
 public:
 
+	UPROPERTY(BlueprintReadOnly, Category = "ODM_Gear")
+	float MoveRight;
+
 	UFUNCTION(BlueprintImplementableEvent)
-	void BP_GrappleTarget(AActor* Target);
+	void BP_AddForce(AActor* Target);
 
 	void SetbIsGrappling(bool NewValue) { bIsGrappling = NewValue; }
 

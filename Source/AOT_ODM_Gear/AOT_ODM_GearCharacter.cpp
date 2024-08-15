@@ -103,36 +103,21 @@ void AAOT_ODM_GearCharacter::Tick(float DeltaTime)
 		AbilitySystemComp->TryActivateAbilityByClass(GrappleAbilityFindValidTarget);
 	}
 
-	//if(bIsGrappling)
-	//{
-	//	if (GrappleTargetIndicators.Num() > 0)
-	//	{
-	//		// create iterator over targets 
-	//		auto It = GrappleTargetIndicators.CreateIterator();
+	if(bIsGrappling)
+	{
+		if (GrappleTargetIndicators.Num() > 0)
+		{
+			TArray<AActor*> TargetKeys;
+			GrappleTargetIndicators.GetKeys(TargetKeys);
 
-	//		// get the first target
-	//		AActor* FirstGrappleTarget = It.Key();
-
-	//		// if valid 
-	//		if (FirstGrappleTarget)
-	//		{
-	//			FVector GrappleTargetLocation = FirstGrappleTarget->GetActorLocation();
-	//			FVector PlayerLocation = GetActorLocation();
-	//			FVector DirectionToGrapple = GrappleTargetLocation - PlayerLocation;
-	//			FVector DirectionToGrappleNormalized = DirectionToGrapple.GetSafeNormal();
-	//			float DistanceToGrapple = DirectionToGrapple.Size();
-
-	//			// Launch towards the target
-	//			if (!bHasBeenLaunched)
-	//			{
-	//				FVector LaunchForce = DirectionToGrappleNormalized * 3000; // Adjust LaunchStrength to control launch speed
-	//				GetCharacterMovement()->Launch(LaunchForce);
-	//				
-	//				bHasBeenLaunched = true;
-	//			}
-	//		}
-	//	}
-	//}
+			if(TargetKeys.Num() == 1)
+			{
+				AActor* FirstGrappleTarget = TargetKeys[0];
+				BP_AddForce(FirstGrappleTarget);
+			}
+			
+		}
+	}
 }
 
 #pragma region Inputs
@@ -185,10 +170,14 @@ void AAOT_ODM_GearCharacter::Move(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
+		MoveRight = MovementVector.X;
+		UE_LOG(LogTemp, Warning, TEXT("MoveRight: %f"), MoveRight);
+
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
+		
 		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
 	
@@ -222,7 +211,7 @@ void AAOT_ODM_GearCharacter::StartGrapple()
 {
 	if(bIsGrappling)
 	{
-		//GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
 
 		//UE_LOG(LogTemp, Warning, TEXT("Grappling"));
 
@@ -234,7 +223,7 @@ void AAOT_ODM_GearCharacter::StopGrapple()
 {
 	if(bIsGrappling)
 	{
-		//GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Falling);
+		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Falling);
 		bIsGrappling = false;
 
 		//@TODO check which cable is attached and detach that cable

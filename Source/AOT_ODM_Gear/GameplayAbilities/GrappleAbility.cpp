@@ -22,6 +22,10 @@ void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
                 TArray<AActor*> TargetKeys;
                 PlayerCharacter->GrappleTargetIndicators.GetKeys(TargetKeys);
 
+                // Get locations of cable components in world space
+                FVector LeftCableLocation = PlayerCharacter->GetODMGearActor()->GetLeftCableComponent()->GetComponentLocation();
+                FVector RightCableLocation = PlayerCharacter->GetODMGearActor()->GetRightCableComponent()->GetComponentLocation();
+
                 // two valid grapple targets
                 if(TargetKeys.Num() == 2)
                 {
@@ -29,10 +33,6 @@ void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
 
                     AActor* FirstGrappleTarget = TargetKeys[0];
                     AActor* SecondGrappleTarget = TargetKeys[1];
-
-                    // Get locations of cable components in world space
-                    FVector LeftCableLocation = PlayerCharacter->GetODMGearActor()->GetLeftCableComponent()->GetComponentLocation();
-                    FVector RightCableLocation = PlayerCharacter->GetODMGearActor()->GetRightCableComponent()->GetComponentLocation();
 
                     FVector FirstGrappleTargetLocation = FirstGrappleTarget->GetActorLocation();
 
@@ -57,30 +57,16 @@ void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
                     }
 
                     PlayerCharacter->SetbIsGrappling(true);
-
-
-
-
-
-
-
-
-
-
-                    // @TODO if two targets fire a cable at each target
                 }
 
                 // @TODO if player is direcly looking at 1 object -> fire both cables at same object 
+                
                 // 1 valid grapple target 
                 else if(TargetKeys.Num() == 1) 
                 {
                     UE_LOG(LogTemp, Warning, TEXT("one  grapple target "));
 
                     AActor* GrapleTarget = TargetKeys[0];
-
-                    // Get locations of cable components in world space
-                    FVector LeftCableLocation = PlayerCharacter->GetODMGearActor()->GetLeftCableComponent()->GetComponentLocation();
-                    FVector RightCableLocation = PlayerCharacter->GetODMGearActor()->GetRightCableComponent()->GetComponentLocation();
 
                     FVector GrappleTargetLocation = GrapleTarget->GetActorLocation();
 
