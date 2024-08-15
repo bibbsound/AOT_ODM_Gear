@@ -102,11 +102,19 @@ private:
 
 public:
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Ability")
+	TArray<AActor*> TargetsArray; //temps
+
+
+
 	UPROPERTY(BlueprintReadOnly, Category = "ODM_Gear")
 	float MoveRight;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void BP_AddForce(AActor* Target);
+	void BP_AddForcex();//temps
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_AddForce(AActor* Target);//temps
 
 	void SetbIsGrappling(bool NewValue) { bIsGrappling = NewValue; }
 

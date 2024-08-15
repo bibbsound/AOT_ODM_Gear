@@ -32,9 +32,6 @@ private:
 	// Stores the previous grapple targets
 	TArray<AActor*> PreviousGrappleTargets;
 
-	// Keeps track of each grapple target and its grapple indicator
-	//TMap<AActor*, UWidgetComponent*> GrappleTargetIndicators;
-
 	// The widget to be spawned on screen, when there is a valid grapple point
 	UPROPERTY(EditDefaultsOnly, Category = "Grapple Ability")
 	TSubclassOf<UUserWidget> GrapplePointWidget;
@@ -54,4 +51,8 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_BestGrappleTarget(AActor* Target);
+
+public:
+
+	
 };

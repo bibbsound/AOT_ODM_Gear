@@ -34,7 +34,7 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
         TArray<FHitResult> HitResults;
         bool bSphereHit = GetWorld()->SweepMultiByChannel(HitResults, CameraLocation, CameraLocation, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(SphereRadius));
 
-        //DrawDebugSphere(GetWorld(), CameraLocation, SphereRadius, 12, FColor::Orange, false, 2.0f);
+        DrawDebugSphere(GetWorld(), CameraLocation, SphereRadius, 12, FColor::Orange, false, 2.0f);
         
         /* Find valid grapple targets */
 		TArray<AActor*> AllGrappleTargets;
@@ -50,28 +50,31 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
                 // Add grapple targets to array
 				AllGrappleTargets.Add(HitActor);
 
-                //DrawDebugSphere(GetWorld(), Hit.ImpactPoint, 20.0f, 12, FColor::Emerald, false, 2.0f);
+               // DrawDebugSphere(GetWorld(), Hit.ImpactPoint, 20.0f, 12, FColor::Emerald, false, 2.0f);
 
-				//UE_LOG(LogTemp, Warning, TEXT("Grapple Actor: %s"), *HitActor->GetFullName());
+			   // UE_LOG(LogTemp, Warning, TEXT("Grapple Actor: %s"), *HitActor->GetFullName());
 			}
 		}
         
+        /*ERROR BELOW*/
+
         /* Find the best two grapple points (This is based on distance and angle from player) */
         TArray<AActor*> ValidGrappleTargets;
+        ValidGrappleTargets = AllGrappleTargets; // temp
 
-        FVector PlayerForwardVector = PlayerCharacter->GetActorForwardVector();
+        //FVector PlayerForwardVector = PlayerCharacter->GetActorForwardVector();
 
-        for (AActor* Target : AllGrappleTargets)
-        {
-            FVector DirectionToTarget = (Target->GetActorLocation() - CameraLocation).GetSafeNormal();
-            float DotProduct = FVector::DotProduct(PlayerForwardVector, DirectionToTarget);
+        //for (AActor* Target : AllGrappleTargets)
+        //{
+        //    FVector DirectionToTarget = (Target->GetActorLocation() - CameraLocation).GetSafeNormal();
+        //    float DotProduct = FVector::DotProduct(PlayerForwardVector, DirectionToTarget);
 
-            if (DotProduct > MaxGrappleAngle)
-            {
-                ValidGrappleTargets.Add(Target);
-            }
-        }
-
+        //    if (DotProduct > MaxGrappleAngle)
+        //    {
+        //        ValidGrappleTargets.Add(Target);
+        //    }
+        //}
+        //
         /* Sort grapple targets by distance to the camera, this allows for a max of two grapple targets (similar to ODM) */
         ValidGrappleTargets.Sort([&](const AActor& A, const AActor& B)
             {
@@ -85,6 +88,12 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
         {
             ValidGrappleTargets.SetNum(2);
         }
+
+        /*ERROR ABOVE*/
+
+        // PlayerCharacter->TargetsArray = AllGrappleTargets;
+
+        // PlayerCharacter->TargetsArray.Num() > 0 ? PlayerCharacter->SetbCanGrapple(true) : PlayerCharacter->SetbCanGrapple(false);
 
         // Handle UI indicators
         TMap<AActor*, UWidgetComponent*> NewGrappleTargetIndicators;

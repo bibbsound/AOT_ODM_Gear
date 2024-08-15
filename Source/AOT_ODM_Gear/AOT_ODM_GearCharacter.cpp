@@ -98,10 +98,12 @@ void AAOT_ODM_GearCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if(bShouldActivateGrappleAbility)
+	
+	if (bShouldActivateGrappleAbility)
 	{
 		AbilitySystemComp->TryActivateAbilityByClass(GrappleAbilityFindValidTarget);
 	}
+
 
 	if(bIsGrappling)
 	{
@@ -116,6 +118,11 @@ void AAOT_ODM_GearCharacter::Tick(float DeltaTime)
 				BP_AddForce(FirstGrappleTarget);
 			}
 			
+		}
+
+		if(TargetsArray.Num() > 0)
+		{
+			//BP_AddForce(TargetsArray[0]);
 		}
 	}
 }
@@ -213,7 +220,7 @@ void AAOT_ODM_GearCharacter::StartGrapple()
 	{
 		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
 
-		//UE_LOG(LogTemp, Warning, TEXT("Grappling"));
+		UE_LOG(LogTemp, Warning, TEXT("Grappling"));
 
 		//GetCharacterMovement()->GravityScale = 0.2f;
 	}
@@ -230,10 +237,7 @@ void AAOT_ODM_GearCharacter::StopGrapple()
 		ODM_Gear->DetattachGrappleCable(ODM_Gear->GetLeftCableComponent());
 		ODM_Gear->DetattachGrappleCable(ODM_Gear->GetRightCableComponent());
 
-
-		//UE_LOG(LogTemp, Error, TEXT("Grappling FINISHED"));
-
-		bHasBeenLaunched = false;
+		UE_LOG(LogTemp, Error, TEXT("Grappling FINISHED"));
 
 		//GetCharacterMovement()->GravityScale = 1.0f;
 	}
