@@ -102,6 +102,9 @@ private:
 
 public:
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ODM_Gear")
+	float LaunchStrength;
+
 	UPROPERTY(BlueprintReadOnly, Category = "ODM_Gear")
 	float MoveRight;
 

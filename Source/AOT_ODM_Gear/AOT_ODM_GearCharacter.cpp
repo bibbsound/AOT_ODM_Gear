@@ -107,18 +107,37 @@ void AAOT_ODM_GearCharacter::Tick(float DeltaTime)
 
 	if(bIsGrappling)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("bIsGrappling"));
 		if (GrappleTargetIndicators.Num() > 0)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("GrappleTargetIndicators.Num() > 0"));
 			TArray<AActor*> TargetKeys;
 			GrappleTargetIndicators.GetKeys(TargetKeys);
 
+			// If one valid target and one cable has been attached, use the target as an anchor point to allow the player to swing (more air control)
 			if(TargetKeys.Num() == 1)
 			{
-				UE_LOG(LogTemp, Warning, TEXT("TargetKeys.Num() == 1"));
+				UE_LOG(LogTemp, Warning, TEXT("1 target"));
 				AActor* FirstGrappleTarget = TargetKeys[0];
 				BP_AddForce(FirstGrappleTarget);
+			}
+
+			// If two valid grapple points, the player will use them as anchor points to launch themselves forwards 
+			if(TargetKeys.Num() == 2)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("2 target"));
+
+				AActor* FirstGrappleTarget = TargetKeys[0];
+				AActor* SecondGrappleTarget = TargetKeys[1];
+
+				// Calculate the midpoint of the two targets 
+				FVector Midpoint = (FirstGrappleTarget->GetActorLocation() + SecondGrappleTarget->GetActorLocation()) / 2.0f;
+
+				// Get direction of midpoint
+				FVector LaunchDirection = (Midpoint - GetActorLocation()).GetSafeNormal();
+
+				// Calculate velocity of the launch 
+				FVector LaunchVelocity = LaunchDirection * LaunchStrength;
+
+				LaunchCharacter(LaunchVelocity, true, true);
 			}
 		}
 	}
@@ -175,7 +194,7 @@ void AAOT_ODM_GearCharacter::Move(const FInputActionValue& Value)
 	if (Controller != nullptr)
 	{
 		MoveRight = MovementVector.X;
-		UE_LOG(LogTemp, Warning, TEXT("MoveRight: %f"), MoveRight);
+		//UE_LOG(LogTemp, Warning, TEXT("MoveRight: %f"), MoveRight);
 
 		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();

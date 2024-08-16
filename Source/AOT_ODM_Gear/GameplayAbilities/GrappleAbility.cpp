@@ -8,13 +8,13 @@
 
 void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Grapple ability activated"));
+	//UE_LOG(LogTemp, Warning, TEXT("Grapple ability activated"));
 
     if (AAOT_ODM_GearCharacter* PlayerCharacter = Cast<AAOT_ODM_GearCharacter>(GetAvatarActorFromActorInfo()))
     {
         if(PlayerCharacter->GetbCanGrapple())
         {
-            UE_LOG(LogTemp, Warning, TEXT("Valid Grapple Target, Grapple towards target"));
+            //UE_LOG(LogTemp, Warning, TEXT("Valid Grapple Target, Grapple towards target"));
 
             // valid targets
             if (PlayerCharacter->GrappleTargetIndicators.Num() > 0)
