@@ -98,7 +98,7 @@ private:
 
 	bool bHasBeenLaunched;
 
-	
+	bool bMidpointLaunch = true;
 
 public:
 

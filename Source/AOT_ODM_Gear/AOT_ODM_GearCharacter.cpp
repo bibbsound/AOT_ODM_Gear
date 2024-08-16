@@ -129,15 +129,59 @@ void AAOT_ODM_GearCharacter::Tick(float DeltaTime)
 				AActor* SecondGrappleTarget = TargetKeys[1];
 
 				// Calculate the midpoint of the two targets 
+				//FVector Midpoint = (FirstGrappleTarget->GetActorLocation() + SecondGrappleTarget->GetActorLocation()) / 2.0f;
+
+				//// Get direction of midpoint
+				//FVector LaunchDirection = (Midpoint - GetActorLocation()).GetSafeNormal();
+
+				//// Calculate velocity of the launch 
+				//FVector LaunchVelocity = LaunchDirection * LaunchStrength;
+
+				//LaunchCharacter(LaunchVelocity, true, true);
+
+
+				// Calculate the midpoint of the two targets 
 				FVector Midpoint = (FirstGrappleTarget->GetActorLocation() + SecondGrappleTarget->GetActorLocation()) / 2.0f;
 
-				// Get direction of midpoint
-				FVector LaunchDirection = (Midpoint - GetActorLocation()).GetSafeNormal();
+				// Calculate the distance from the player to the midpoint
+				float DistanceToMidpoint = FVector::Dist(GetActorLocation(), Midpoint);
 
-				// Calculate velocity of the launch 
-				FVector LaunchVelocity = LaunchDirection * LaunchStrength;
 
-				LaunchCharacter(LaunchVelocity, true, true);
+				if (bMidpointLaunch)
+				{
+					if (DistanceToMidpoint > 100.0f)  // Adjust the threshold as needed
+					{
+
+						UE_LOG(LogTemp, Warning, TEXT("Midpoint launch"));
+						FVector LaunchDirection = (Midpoint - GetActorLocation()).GetSafeNormal();
+						FVector LaunchVelocity = LaunchDirection * LaunchStrength;
+
+						// Launch the player towards the midpoint
+						LaunchCharacter(LaunchVelocity, true, true);
+					}
+
+					else
+					{
+						bMidpointLaunch = false;
+					}
+
+				}
+				
+				else
+				{
+					UE_LOG(LogTemp, Warning, TEXT("AFTER Midpoint launch"));
+
+					FVector CameraLocation;
+					FRotator CameraRotation;
+					GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
+
+					FVector LaunchDirection = CameraRotation.Vector();
+					FVector LaunchVelocity = LaunchDirection * LaunchStrength * 2.0f;
+
+					// Continue moving in the same direction
+					LaunchCharacter(LaunchVelocity, true, true);
+					StopGrapple();
+				}
 			}
 		}
 	}
@@ -252,6 +296,8 @@ void AAOT_ODM_GearCharacter::StopGrapple()
 		//@TODO check which cable is attached and detach that cable
 		ODM_Gear->DetattachGrappleCable(ODM_Gear->GetLeftCableComponent());
 		ODM_Gear->DetattachGrappleCable(ODM_Gear->GetRightCableComponent());
+
+		bMidpointLaunch = true;
 
 		UE_LOG(LogTemp, Error, TEXT("Grappling FINISHED"));
 
