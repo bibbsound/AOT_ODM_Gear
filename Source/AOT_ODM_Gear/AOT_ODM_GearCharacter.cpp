@@ -107,22 +107,19 @@ void AAOT_ODM_GearCharacter::Tick(float DeltaTime)
 
 	if(bIsGrappling)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("bIsGrappling"));
 		if (GrappleTargetIndicators.Num() > 0)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("GrappleTargetIndicators.Num() > 0"));
 			TArray<AActor*> TargetKeys;
 			GrappleTargetIndicators.GetKeys(TargetKeys);
 
 			if(TargetKeys.Num() == 1)
 			{
+				UE_LOG(LogTemp, Warning, TEXT("TargetKeys.Num() == 1"));
 				AActor* FirstGrappleTarget = TargetKeys[0];
 				BP_AddForce(FirstGrappleTarget);
 			}
-			
-		}
-
-		if(TargetsArray.Num() > 0)
-		{
-			//BP_AddForce(TargetsArray[0]);
 		}
 	}
 }
