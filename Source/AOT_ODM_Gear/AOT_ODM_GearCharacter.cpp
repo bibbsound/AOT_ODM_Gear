@@ -283,6 +283,8 @@ void AAOT_ODM_GearCharacter::StartGrapple()
 		UE_LOG(LogTemp, Warning, TEXT("Grappling"));
 
 		//GetCharacterMovement()->GravityScale = 0.2f;
+
+		BP_PlayMontage();
 	}
 }
 

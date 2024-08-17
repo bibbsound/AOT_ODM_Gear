@@ -109,7 +109,10 @@ public:
 	float MoveRight;
 
 	UFUNCTION(BlueprintImplementableEvent)
-	void BP_AddForce(AActor* Target);//temps
+	void BP_AddForce(AActor* Target); //temp
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_PlayMontage(); //temp
 
 	void SetbIsGrappling(bool NewValue) { bIsGrappling = NewValue; }
 
