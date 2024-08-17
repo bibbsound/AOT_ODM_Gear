@@ -90,7 +90,7 @@ private:
 
 	FName ODM_Gear_Socket;
 
-	bool bIsGrappling = false;
+	
 
 	void StartGrapple();
 
@@ -99,6 +99,12 @@ private:
 	bool bHasBeenLaunched;
 
 	bool bMidpointLaunch = true;
+
+protected:
+
+	// Used in ABP, for grappling state
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "ODM_Gear")
+	bool bIsGrappling = false;
 
 public:
 
