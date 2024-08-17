@@ -292,6 +292,8 @@ void AAOT_ODM_GearCharacter::StopGrapple()
 {
 	if(bIsGrappling)
 	{
+		BP_StopMontage();
+
 		GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Falling);
 		bIsGrappling = false;
 

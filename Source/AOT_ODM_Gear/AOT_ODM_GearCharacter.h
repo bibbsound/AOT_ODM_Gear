@@ -114,6 +114,9 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void BP_PlayMontage(); //temp
 
+	UFUNCTION(BlueprintImplementableEvent)
+	void BP_StopMontage(); //temp
+
 	void SetbIsGrappling(bool NewValue) { bIsGrappling = NewValue; }
 
 	bool GetbIsGrappling() const { return bIsGrappling; }
