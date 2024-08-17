@@ -34,7 +34,7 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
         TArray<FHitResult> HitResults;
         bool bSphereHit = GetWorld()->SweepMultiByChannel(HitResults, CameraLocation, CameraLocation, FQuat::Identity, ECC_Visibility, FCollisionShape::MakeSphere(SphereRadius));
 
-        DrawDebugSphere(GetWorld(), CameraLocation, SphereRadius, 12, FColor::Orange, false, 2.0f);
+        //DrawDebugSphere(GetWorld(), CameraLocation, SphereRadius, 12, FColor::Orange, false, 2.0f);
         
         /* Find valid grapple targets */
 		TArray<AActor*> AllGrappleTargets;
