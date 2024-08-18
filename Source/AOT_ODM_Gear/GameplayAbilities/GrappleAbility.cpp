@@ -72,11 +72,13 @@ void UGrappleAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
                     if(DistanceToLeftCable < DistanceToRightCable)
                     {
                         PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetLeftCableComponent(), GrapleTarget);
+                        PlayerCharacter->GetODMGearActor()->bRightCableAttached = false;
                     }
 
                     else
                     {
                         PlayerCharacter->GetODMGearActor()->AttachGrappleCable(PlayerCharacter->GetODMGearActor()->GetRightCableComponent(), GrapleTarget);
+                        PlayerCharacter->GetODMGearActor()->bRightCableAttached = true;
                     }
 
                     PlayerCharacter->SetbIsGrappling(true);

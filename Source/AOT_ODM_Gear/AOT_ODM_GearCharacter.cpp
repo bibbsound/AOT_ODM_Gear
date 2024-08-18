@@ -16,6 +16,8 @@
 #include "AbilitySystemComponent.h"
 #include "GameplayAbilities/PlayerAttributeSet.h"
 
+#include "CableComponent.h"
+
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 AAOT_ODM_GearCharacter::AAOT_ODM_GearCharacter()
@@ -129,23 +131,10 @@ void AAOT_ODM_GearCharacter::Tick(float DeltaTime)
 				AActor* SecondGrappleTarget = TargetKeys[1];
 
 				// Calculate the midpoint of the two targets 
-				//FVector Midpoint = (FirstGrappleTarget->GetActorLocation() + SecondGrappleTarget->GetActorLocation()) / 2.0f;
-
-				//// Get direction of midpoint
-				//FVector LaunchDirection = (Midpoint - GetActorLocation()).GetSafeNormal();
-
-				//// Calculate velocity of the launch 
-				//FVector LaunchVelocity = LaunchDirection * LaunchStrength;
-
-				//LaunchCharacter(LaunchVelocity, true, true);
-
-
-				// Calculate the midpoint of the two targets 
 				FVector Midpoint = (FirstGrappleTarget->GetActorLocation() + SecondGrappleTarget->GetActorLocation()) / 2.0f;
 
 				// Calculate the distance from the player to the midpoint
 				float DistanceToMidpoint = FVector::Dist(GetActorLocation(), Midpoint);
-
 
 				if (bMidpointLaunch)
 				{
@@ -284,7 +273,31 @@ void AAOT_ODM_GearCharacter::StartGrapple()
 
 		//GetCharacterMovement()->GravityScale = 0.2f;
 
+		
+
 		BP_PlayMontage();
+
+		/*if (GrappleTargetIndicators.Num() > 0)
+		{
+			TArray<AActor*> TargetKeys;
+			GrappleTargetIndicators.GetKeys(TargetKeys);
+
+			if(TargetKeys.Num() == 1)
+			{
+				if(ODM_Gear->bRightCableAttached)
+				{
+					FRotator RightCableRotation = ODM_Gear->GetRightCableComponent()->GetComponentRotation();
+					SetActorRotation(RightCableRotation.Quaternion());
+				}
+
+				else
+				{
+					FRotator LeftCableRotation = ODM_Gear->GetLeftCableComponent()->GetComponentRotation();
+					SetActorRotation(LeftCableRotation.Quaternion());
+				}
+			}
+
+		}*/
 	}
 }
 
@@ -300,6 +313,7 @@ void AAOT_ODM_GearCharacter::StopGrapple()
 		//@TODO check which cable is attached and detach that cable
 		ODM_Gear->DetattachGrappleCable(ODM_Gear->GetLeftCableComponent());
 		ODM_Gear->DetattachGrappleCable(ODM_Gear->GetRightCableComponent());
+		ODM_Gear->bRightCableAttached = false;
 
 		bMidpointLaunch = true;
 
