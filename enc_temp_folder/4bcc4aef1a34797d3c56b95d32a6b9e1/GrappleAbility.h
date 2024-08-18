@@ -14,5 +14,10 @@ class AOT_ODM_GEAR_API UGrappleAbility : public UGameplayAbility
 	
 public:
 
+	UPROPERTY(EditDefaultsOnly, Category = "Ability")
+	float GrapplePullForce;
+
+
+
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 };
