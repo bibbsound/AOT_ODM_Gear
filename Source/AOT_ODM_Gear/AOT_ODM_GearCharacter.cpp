@@ -62,6 +62,9 @@ AAOT_ODM_GearCharacter::AAOT_ODM_GearCharacter()
 	AbilitySystemComp = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	PlayerAttributeSet = CreateDefaultSubobject<UPlayerAttributeSet>(TEXT("PlayerAttributeSet"));
 
+	//smc = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("smc"));
+	//smc->SetupAttachment(FollowCamera);
+
 	bShouldActivateGrappleAbility = true;
 
 	bCanGrapple = false;
@@ -99,6 +102,13 @@ void AAOT_ODM_GearCharacter::BeginPlay()
 void AAOT_ODM_GearCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	
+
+
+
+
+
 
 	
 	if (bShouldActivateGrappleAbility)

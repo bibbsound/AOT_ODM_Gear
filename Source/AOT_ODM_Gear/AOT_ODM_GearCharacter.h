@@ -72,10 +72,11 @@ class AAOT_ODM_GearCharacter : public ACharacter, public IAbilitySystemInterface
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* GrappleAction;
+	
 
 private:
 
-	
+
 
 	// in future will be tied to picking up or equipping grapple ability from loadout system
 	bool bShouldActivateGrappleAbility;
@@ -99,6 +100,9 @@ private:
 	bool bMidpointLaunch = true;
 
 public:
+
+	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	//UStaticMeshComponent* smc; //TEMP
 
 	UCameraComponent* GetPlayerCameraComponent() const { return FollowCamera; }
 
