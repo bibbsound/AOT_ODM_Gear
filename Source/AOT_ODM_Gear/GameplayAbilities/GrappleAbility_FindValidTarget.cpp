@@ -28,7 +28,9 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
         FRotator CameraRotation;
         PlayerController->GetPlayerViewPoint(CameraLocation, CameraRotation);
 
-        FVector TraceEnd = CameraLocation + (CameraRotation.Vector() * MaxGrappleDistance);
+        FVector CameraForwardVector = CameraRotation.Vector();
+
+        FVector TraceEnd = CameraLocation + (CameraForwardVector * MaxGrappleDistance);
         float SphereRadius = MaxGrappleDistance;
 
         TArray<FHitResult> HitResults;
@@ -53,7 +55,6 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
                 FVector a = Hit.ImpactPoint;
 			}
 		}
-        
 
         /* Find the best two grapple points (This is based on distance and angle from player) */
         TArray<AActor*> ValidGrappleTargets;
@@ -111,6 +112,21 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
                     NewGrappleTargetIndicators.Add(Target, WidgetComp);
                 }
             }
+
+            // Test UI indictors
+            FVector ProjectedPoint = CameraLocation + (CameraForwardVector * MaxGrappleDistance);
+
+            if (UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(Target->GetRootComponent()))
+            {
+                FVector ClosestPoint;
+
+                PrimitiveComponent->GetClosestPointOnCollision(ProjectedPoint, ClosestPoint);
+
+                DrawDebugSphere(GetWorld(), ClosestPoint, 30.0f, 12, FColor::Green, false, 1.0f);
+
+                DrawDebugLine(GetWorld(), CameraLocation, ClosestPoint, FColor::Red, false, 1.0f, 0.0f, 1.0f);
+            }
+
         }
 
         // Destroy UI indicators for targets that are no longer valid

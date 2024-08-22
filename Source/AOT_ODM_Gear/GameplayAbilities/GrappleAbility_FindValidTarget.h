@@ -41,17 +41,6 @@ private:
 
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
-protected:
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void BP_ValidGrappleTarget();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void BP_InValidGrappleTarget();
-
-	UFUNCTION(BlueprintImplementableEvent)
-	void BP_BestGrappleTarget(AActor* Target);
-
 public:
 
 	

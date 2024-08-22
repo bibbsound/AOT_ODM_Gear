@@ -96,8 +96,6 @@ private:
 
 	void StopGrapple();
 
-	bool bHasBeenLaunched;
-
 	bool bMidpointLaunch = true;
 
 public:
