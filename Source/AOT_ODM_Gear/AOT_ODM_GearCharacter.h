@@ -100,6 +100,8 @@ private:
 
 public:
 
+	UCameraComponent* GetPlayerCameraComponent() const { return FollowCamera; }
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ODM_Gear")
 	float LaunchStrength;
 

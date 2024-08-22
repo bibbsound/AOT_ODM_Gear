@@ -114,17 +114,17 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
             }
 
             // Test UI indictors
-            FVector ProjectedPoint = CameraLocation + (CameraForwardVector * MaxGrappleDistance);
+            FVector ProjectedPoint = CameraLocation + (CameraForwardVector * 50);
 
             if (UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(Target->GetRootComponent()))
             {
                 FVector ClosestPoint;
 
-                PrimitiveComponent->GetClosestPointOnCollision(ProjectedPoint, ClosestPoint);
+                PrimitiveComponent->GetClosestPointOnCollision(PlayerCharacter->GetActorLocation(), ClosestPoint);
 
-                DrawDebugSphere(GetWorld(), ClosestPoint, 30.0f, 12, FColor::Green, false, 1.0f);
+                DrawDebugSphere(GetWorld(), ClosestPoint, 20.0f, 12, FColor::Green, false, 1.0f);
 
-                DrawDebugLine(GetWorld(), CameraLocation, ClosestPoint, FColor::Red, false, 1.0f, 0.0f, 1.0f);
+                //DrawDebugLine(GetWorld(), CameraLocation, ProjectedPoint, FColor::Red, false, 1.0f, 0.0f, 1.0f);
             }
 
         }
