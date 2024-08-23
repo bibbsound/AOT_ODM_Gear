@@ -152,7 +152,59 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
             
             // use end point of line trace to find closest point on target actor
 
+            FVector CameraTraceEnd = CameraLocation + (CameraForwardVector * MaxGrappleDistance);
 
+            FHitResult CameraTraceHitResult;
+            FCollisionQueryParams CameraTraceQueryParams;
+
+            bool bHit = GetWorld()->LineTraceSingleByChannel(CameraTraceHitResult, CameraLocation, CameraTraceEnd, ECC_Visibility, CameraTraceQueryParams);
+            DrawDebugLine(GetWorld(), CameraLocation, CameraTraceEnd, FColor::Red, false, 1.0f, 0.0f, 1.0f);
+
+            // If the camera trace hits an object
+            if(bHit)
+            {
+                // If the hit object is a grapple target, 
+                if(CameraTraceHitResult.GetActor() == Target)
+                {
+                    UE_LOG(LogTemp, Warning, TEXT("Hit Grapple Actor"));
+                    DrawDebugSphere(GetWorld(), CameraTraceHitResult.ImpactPoint, 20.0f, 12, FColor::Green, false, 1.0f);
+                }
+
+                // If the hit object is NOT a grapple target, then use the hit location to get the closest point to the grapple target
+                else
+                {
+                    UE_LOG(LogTemp, Warning, TEXT("Hit Actor"));
+                    if (UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(Target->GetRootComponent()))
+                    {
+                        FVector ClosestPoint;
+
+                        PrimitiveComponent->GetClosestPointOnCollision(CameraTraceHitResult.ImpactPoint, ClosestPoint);
+
+                        DrawDebugSphere(GetWorld(), ClosestPoint, 20.0f, 12, FColor::Green, false, 1.0f);
+
+                    }
+                }
+
+                
+            }
+
+            // If the camera trace did not hit anything then use endpoint of trace
+            else
+            {
+                UE_LOG(LogTemp, Warning, TEXT("NO Hit "));
+
+				if (UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(Target->GetRootComponent()))
+				{
+					FVector ClosestPoint;
+
+					PrimitiveComponent->GetClosestPointOnCollision(CameraTraceEnd, ClosestPoint);
+
+					DrawDebugSphere(GetWorld(), ClosestPoint, 20.0f, 12, FColor::Green, false, 1.0f);
+
+					
+				}
+
+            }
 
 
 
