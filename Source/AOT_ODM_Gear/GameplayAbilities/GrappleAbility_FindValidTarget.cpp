@@ -84,34 +84,12 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
             ValidGrappleTargets.SetNum(2);
         }
 
-        // Handle UI indicators
+        /* Spawn UI indicator on valid grapple target */
         TMap<AActor*, UWidgetComponent*> NewGrappleTargetIndicators;
 
         for (AActor* Target : ValidGrappleTargets)
         {
-            if (PlayerCharacter->GrappleTargetIndicators.Contains(Target))
-            {
-                // If the indicator already exists, just keep it
-                NewGrappleTargetIndicators.Add(Target, PlayerCharacter->GrappleTargetIndicators[Target]);
-                PlayerCharacter->GrappleTargetIndicators.Remove(Target);
-            }
-
-            else
-            {
-                // Create a new widget component for the grapple point
-                UWidgetComponent* WidgetComp = NewObject<UWidgetComponent>(Target);
-
-                if (WidgetComp && GrapplePointWidget)
-                {
-                    WidgetComp->SetupAttachment(Target->GetRootComponent()); // Attach to the target actor
-                    WidgetComp->SetWidgetClass(GrapplePointWidget);
-                    WidgetComp->SetRelativeLocation(FVector::ZeroVector);
-                    WidgetComp->SetWidgetSpace(EWidgetSpace::Screen); // Use screen space for 2D UI
-                    WidgetComp->RegisterComponent();
-
-                    NewGrappleTargetIndicators.Add(Target, WidgetComp);
-                }
-            }
+            SpawnUIIndicator(Target, NewGrappleTargetIndicators);
 
             // Test UI indicators
             FVector CameraTraceEnd = CameraLocation + (CameraForwardVector * MaxGrappleDistance);
@@ -128,23 +106,15 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
                 // If the hit object is a grapple target, grapple point will be on the target 
                 if(CameraTraceHitResult.GetActor() == Target)
                 {
-                    UE_LOG(LogTemp, Warning, TEXT("Hit Grapple Actor"));
+                    //UE_LOG(LogTemp, Warning, TEXT("Hit Grapple Actor"));
                     DrawDebugSphere(GetWorld(), CameraTraceHitResult.ImpactPoint, 20.0f, 12, FColor::Green, false, 1.0f);
                 }
 
                 // If the hit object is NOT a grapple target, then use the hit location to get the closest point to the grapple target and this will be be grapple point
                 else
                 {
-                    UE_LOG(LogTemp, Warning, TEXT("Hit Actor"));
-                   /* if (UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(Target->GetRootComponent()))
-                    {
-                        FVector ClosestPoint;
-
-                        PrimitiveComponent->GetClosestPointOnCollision(CameraTraceHitResult.ImpactPoint, ClosestPoint);
-
-                        DrawDebugSphere(GetWorld(), ClosestPoint, 20.0f, 12, FColor::Green, false, 1.0f);
-                    }*/
-
+                    //UE_LOG(LogTemp, Warning, TEXT("Hit Actor"));
+                
                     GetClosestPointOnActorCollision(Target, CameraTraceHitResult.ImpactPoint);
                 }
             }
@@ -152,22 +122,12 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
             // If the camera trace did not hit anything then use endpoint of trace to get the closest point to the grapple target and this will be be grapple point
             else
             {
-                UE_LOG(LogTemp, Warning, TEXT("NO Hit "));
-
-				/*if (UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(Target->GetRootComponent()))
-				{
-					FVector ClosestPoint;
-
-					PrimitiveComponent->GetClosestPointOnCollision(CameraTraceEnd, ClosestPoint);
-
-					DrawDebugSphere(GetWorld(), ClosestPoint, 20.0f, 12, FColor::Green, false, 1.0f);
-				}*/
+                //UE_LOG(LogTemp, Warning, TEXT("NO Hit "));
 
                 GetClosestPointOnActorCollision(Target, CameraTraceEnd);
             }
 
-
-
+           
 
 
 
@@ -232,9 +192,9 @@ void UGrappleAbility_FindValidTarget::ActivateAbility(const FGameplayAbilitySpec
     }
 }
 
-FVector UGrappleAbility_FindValidTarget::GetClosestPointOnActorCollision(AActor* Actor, FVector StartPoint)
+FVector UGrappleAbility_FindValidTarget::GetClosestPointOnActorCollision(AActor* Target, FVector StartPoint)
 {
-    if (UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(Actor->GetRootComponent()))
+    if (UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(Target->GetRootComponent()))
     {
         FVector ClosestPoint;
 
@@ -246,6 +206,34 @@ FVector UGrappleAbility_FindValidTarget::GetClosestPointOnActorCollision(AActor*
     }
 
     return StartPoint;
+}
+
+void UGrappleAbility_FindValidTarget::SpawnUIIndicator(AActor* Target, TMap<AActor*, UWidgetComponent*>& NewGrappleTargetIndicators)
+{
+    /* Spawn UI indicator on valid grapple target */
+    if (PlayerCharacter->GrappleTargetIndicators.Contains(Target))
+    {
+        // If the indicator already exists, just keep it
+        NewGrappleTargetIndicators.Add(Target, PlayerCharacter->GrappleTargetIndicators[Target]);
+        PlayerCharacter->GrappleTargetIndicators.Remove(Target);
+    }
+
+    else
+    {
+        // Create a new widget component for the grapple point
+        UWidgetComponent* WidgetComp = NewObject<UWidgetComponent>(Target);
+
+        if (WidgetComp && GrapplePointWidget)
+        {
+            WidgetComp->SetupAttachment(Target->GetRootComponent()); // Attach to the target actor
+            WidgetComp->SetWidgetClass(GrapplePointWidget);
+            WidgetComp->SetRelativeLocation(FVector::ZeroVector);
+            WidgetComp->SetWidgetSpace(EWidgetSpace::Screen); // Use screen space for 2D UI
+            WidgetComp->RegisterComponent();
+
+            NewGrappleTargetIndicators.Add(Target, WidgetComp);
+        }
+    }
 }
 
 

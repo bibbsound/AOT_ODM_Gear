@@ -42,7 +42,9 @@ private:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 
 	// Get the closest point on an actor using their collison 
-	FVector GetClosestPointOnActorCollision(AActor* Actor, FVector StartPoint);
+	FVector GetClosestPointOnActorCollision(AActor* Target, FVector StartPoint);
+
+	void SpawnUIIndicator(AActor* Target, TMap<AActor*, UWidgetComponent*>& NewGrappleTargetIndicators);
 
 public:
 
