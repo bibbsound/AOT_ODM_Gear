@@ -14,13 +14,9 @@
 						</Action>
 						<Action Name="" ID="{B29D535B-D18F-4A9D-B7CA-5EDEFB4EEAAD}" ShortID="544784317">
 							<PropertyList>
-								<Property Name="ActionType" Type="int16" Value="38"/>
+								<Property Name="ActionType" Type="int16" Value="20"/>
 							</PropertyList>
-							<ReferenceList>
-								<Reference Name="Target">
-									<ObjectRef Name="PlayerVelocity" ID="{39229F8D-7991-44CB-AC2E-BEBDE68B92FC}" WorkUnitID="{21E483A5-BBAD-4E52-B714-0E0E1D6BE2D2}"/>
-								</Reference>
-							</ReferenceList>
+							<ReferenceList/>
 						</Action>
 					</ChildrenList>
 				</Event>
