@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{94A7B2BD-89F5-4EF9-8D49-046A541278EB}" SchemaVersion="119">
+	<Events>
+		<WorkUnit Name="Default Work Unit" ID="{94A7B2BD-89F5-4EF9-8D49-046A541278EB}" PersistMode="Standalone">
+			<ChildrenList>
+				<Event Name="Grapple" ID="{A56C9A45-82A6-49EB-9BC6-8E36FD91265A}">
+					<ChildrenList>
+						<Action Name="" ID="{BDDEBF25-1419-4E01-A309-7511A1E7A930}" ShortID="242867352">
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="Wind" ID="{E1F06BC5-09D4-4FAF-A159-88D012BF9EB1}" WorkUnitID="{FA9203C3-65D9-40FA-A781-8D8755000D0B}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+						<Action Name="" ID="{B29D535B-D18F-4A9D-B7CA-5EDEFB4EEAAD}" ShortID="544784317">
+							<PropertyList>
+								<Property Name="ActionType" Type="int16" Value="38"/>
+							</PropertyList>
+							<ReferenceList>
+								<Reference Name="Target">
+									<ObjectRef Name="PlayerVelocity" ID="{39229F8D-7991-44CB-AC2E-BEBDE68B92FC}" WorkUnitID="{21E483A5-BBAD-4E52-B714-0E0E1D6BE2D2}"/>
+								</Reference>
+							</ReferenceList>
+						</Action>
+					</ChildrenList>
+				</Event>
+			</ChildrenList>
+		</WorkUnit>
+	</Events>
+</WwiseDocument>

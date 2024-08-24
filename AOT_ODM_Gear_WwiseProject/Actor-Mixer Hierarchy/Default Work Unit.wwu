@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WwiseDocument Type="WorkUnit" ID="{FA9203C3-65D9-40FA-A781-8D8755000D0B}" SchemaVersion="119">
+	<AudioObjects>
+		<WorkUnit Name="Default Work Unit" ID="{FA9203C3-65D9-40FA-A781-8D8755000D0B}" PersistMode="Standalone">
+			<ChildrenList>
+				<Sound Name="Wind" ID="{E1F06BC5-09D4-4FAF-A159-88D012BF9EB1}" ShortID="1010727647">
+					<PropertyList>
+						<Property Name="3DSpatialization" Type="int16" Value="2"/>
+						<Property Name="IsLoopingEnabled" Type="bool" Value="True"/>
+						<Property Name="Soundly:ActiveChannels" Type="string" Value="[]"/>
+						<Property Name="Soundly:FileID" Type="string" Value="SND54162"/>
+						<Property Name="Soundly:FileName" Type="string" Value="C:\Users\Robert\AppData\Local\Temp\tmpp_sjbf7c\afcache\1426367345Ff4sxqvM_wkFwGSND54162sfy.sfy"/>
+						<Property Name="Soundly:HandleStartTime" Type="string" Value="0"/>
+						<Property Name="Soundly:HandleStopTime" Type="string" Value="18.92"/>
+						<Property Name="Soundly:LibraryID" Type="string" Value="1426367345Ff4sxqvM_wkFwG"/>
+						<Property Name="Soundly:LibraryLocation" Type="string" Value="Cloud"/>
+						<Property Name="Soundly:PlaybackSpeed" Type="string" Value="1.0"/>
+						<Property Name="Soundly:ProcessList" Type="string" Value="[]"/>
+						<Property Name="Soundly:RenderedFileBitRate" Type="string" Value="3"/>
+						<Property Name="Soundly:RenderedFilePath" Type="string" Value="C:\Users\Robert\Soundly Audio\Wind, Gust, Designed, Polar, Snow Storm 05 SND54162 1.wav"/>
+						<Property Name="Soundly:RenderedFileSampleRate" Type="string" Value="96000"/>
+						<Property Name="Soundly:SelectionStartTime" Type="string" Value="0.10374261326329613"/>
+						<Property Name="Soundly:SelectionStopTime" Type="string" Value="0.9441891004596191"/>
+					</PropertyList>
+					<ReferenceList>
+						<Reference Name="Conversion">
+							<ObjectRef Name="Default Conversion Settings" ID="{6D1B890C-9826-4384-BF07-C15223E9FB56}" WorkUnitID="{865288B6-43CC-47B1-8D3A-11368E4DD2C7}"/>
+						</Reference>
+						<Reference Name="OutputBus">
+							<ObjectRef Name="Master Audio Bus" ID="{1514A4D8-1DA6-412A-A17E-75CA0C2149F3}" WorkUnitID="{263AE58A-3B01-4687-B162-45912F177A0A}"/>
+						</Reference>
+					</ReferenceList>
+					<ChildrenList>
+						<AudioFileSource Name="Wind, Gust, Designed, Polar, Snow Storm 05 SND54162 1" ID="{FAE5C12F-896A-49F3-9217-91FBBC70A23B}">
+							<PropertyList>
+								<Property Name="FadeInDuration" Type="Real64" Value="0.370980392156863"/>
+								<Property Name="FadeOutDuration" Type="Real64" Value="0.206100217864925"/>
+								<Property Name="OverrideWavLoop" Type="bool" Value="True"/>
+								<Property Name="Soundly:FileIDForAudioSource" Type="string" Value="SND54162"/>
+								<Property Name="TrimBegin" Type="Real64" Value="2.25135054795246"/>
+								<Property Name="TrimEnd" Type="Real64" Value="17.4312473231797"/>
+							</PropertyList>
+							<Language>SFX</Language>
+							<AudioFile>Soundly Audio\Wind, Gust, Designed, Polar, Snow Storm 05 SND54162 1.wav</AudioFile>
+							<MediaIDList>
+								<MediaID ID="860688035"/>
+							</MediaIDList>
+						</AudioFileSource>
+					</ChildrenList>
+					<ActiveSourceList>
+						<ActiveSource Name="Wind, Gust, Designed, Polar, Snow Storm 05 SND54162 1" ID="{FAE5C12F-896A-49F3-9217-91FBBC70A23B}" Platform="Linked"/>
+					</ActiveSourceList>
+				</Sound>
+			</ChildrenList>
+		</WorkUnit>
+	</AudioObjects>
+</WwiseDocument>
