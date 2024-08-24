@@ -91,7 +91,7 @@ private:
 
 	FName ODM_Gear_Socket;
 
-	bool bIsGrappling = false;
+	
 
 	void StartGrapple();
 
@@ -100,6 +100,10 @@ private:
 	bool bMidpointLaunch = true;
 
 public:
+
+
+	UPROPERTY(BlueprintReadOnly, Category = "Player Movement")
+	bool bIsGrappling = false;
 
 	//UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	//UStaticMeshComponent* smc; //TEMP

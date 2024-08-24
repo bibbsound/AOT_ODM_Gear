@@ -44,7 +44,7 @@ private:
 	// Get the closest point on an actor using their collison 
 	FVector GetClosestPointOnActorCollision(AActor* Target, FVector StartPoint);
 
-	void SpawnUIIndicator(AActor* Target, TMap<AActor*, UWidgetComponent*>& NewGrappleTargetIndicators);
+	void SpawnUIIndicator(AActor* Target, FVector SpawnLocation, TMap<AActor*, UWidgetComponent*>& NewGrappleTargetIndicators);
 
 public:
 

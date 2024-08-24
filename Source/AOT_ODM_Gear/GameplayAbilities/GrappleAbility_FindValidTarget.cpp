@@ -89,7 +89,7 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
 
         for (AActor* Target : ValidGrappleTargets)
         {
-            SpawnUIIndicator(Target, NewGrappleTargetIndicators);
+            //SpawnUIIndicator(Target, NewGrappleTargetIndicators);
 
             // Test UI indicators
             FVector CameraTraceEnd = CameraLocation + (CameraForwardVector * MaxGrappleDistance);
@@ -108,6 +108,8 @@ void UGrappleAbility_FindValidTarget::PerformSphereTrace()
                 {
                     //UE_LOG(LogTemp, Warning, TEXT("Hit Grapple Actor"));
                     DrawDebugSphere(GetWorld(), CameraTraceHitResult.ImpactPoint, 20.0f, 12, FColor::Green, false, 1.0f);
+
+                    SpawnUIIndicator(Target, CameraTraceHitResult.ImpactPoint, NewGrappleTargetIndicators);
                 }
 
                 // If the hit object is NOT a grapple target, then use the hit location to get the closest point to the grapple target and this will be be grapple point
@@ -208,7 +210,7 @@ FVector UGrappleAbility_FindValidTarget::GetClosestPointOnActorCollision(AActor*
     return StartPoint;
 }
 
-void UGrappleAbility_FindValidTarget::SpawnUIIndicator(AActor* Target, TMap<AActor*, UWidgetComponent*>& NewGrappleTargetIndicators)
+void UGrappleAbility_FindValidTarget::SpawnUIIndicator(AActor* Target, FVector SpawnLocation, TMap<AActor*, UWidgetComponent*>& NewGrappleTargetIndicators)
 {
     /* Spawn UI indicator on valid grapple target */
     if (PlayerCharacter->GrappleTargetIndicators.Contains(Target))
